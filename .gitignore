@@ -1,0 +1,18 @@
+# Entorno Virtual de Python
+venv/
+.venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Carpetas de datos del usuario
+input/
+catalogos/
+
+# Archivos de datos generados por la aplicación
+datos/processed_files.json
+datos/diccionario_referencia.json
+datos/arancel_clasificacion.json
