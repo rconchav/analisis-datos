@@ -1,0 +1,1730 @@
+[
+    {
+        "nombre": "afganistán",
+        "continente": "Asia",
+        "codigo": "AF",
+        "alias": [
+            "afganistan"
+        ]
+    },
+    {
+        "nombre": "albania",
+        "continente": "Europa",
+        "codigo": "AL",
+        "alias": []
+    },
+    {
+        "nombre": "alemania",
+        "continente": "Europa",
+        "codigo": "DE",
+        "alias": []
+    },
+    {
+        "nombre": "andorra",
+        "continente": "Europa",
+        "codigo": "AD",
+        "alias": []
+    },
+    {
+        "nombre": "angola",
+        "continente": "África",
+        "codigo": "AO",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "anguila",
+        "continente": "América",
+        "codigo": "AI",
+        "alias": []
+    },
+    {
+        "nombre": "antártida",
+        "continente": "Antártida",
+        "codigo": "AQ",
+        "alias": [
+            "antartida"
+        ]
+    },
+    {
+        "nombre": "antigua y barbuda",
+        "continente": "América",
+        "codigo": "AG",
+        "alias": []
+    },
+    {
+        "nombre": "arabia saudita",
+        "continente": "Asia",
+        "codigo": "SA",
+        "alias": []
+    },
+    {
+        "nombre": "argelia",
+        "continente": "África",
+        "codigo": "DZ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "argentina",
+        "continente": "América",
+        "codigo": "AR",
+        "alias": []
+    },
+    {
+        "nombre": "armenia",
+        "continente": "Asia",
+        "codigo": "AM",
+        "alias": []
+    },
+    {
+        "nombre": "aruba",
+        "continente": "América",
+        "codigo": "AW",
+        "alias": []
+    },
+    {
+        "nombre": "australia",
+        "continente": "Oceanía",
+        "codigo": "AU",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "austria",
+        "continente": "Europa",
+        "codigo": "AT",
+        "alias": []
+    },
+    {
+        "nombre": "azerbaiyán",
+        "continente": "Asia",
+        "codigo": "AZ",
+        "alias": [
+            "azerbaiyan"
+        ]
+    },
+    {
+        "nombre": "bahamas",
+        "continente": "América",
+        "codigo": "BS",
+        "alias": []
+    },
+    {
+        "nombre": "bangladés",
+        "continente": "Asia",
+        "codigo": "BD",
+        "alias": [
+            "banglades"
+        ]
+    },
+    {
+        "nombre": "barbados",
+        "continente": "América",
+        "codigo": "BB",
+        "alias": []
+    },
+    {
+        "nombre": "baréin",
+        "continente": "Asia",
+        "codigo": "BH",
+        "alias": [
+            "barein"
+        ]
+    },
+    {
+        "nombre": "bélgica",
+        "continente": "Europa",
+        "codigo": "BE",
+        "alias": [
+            "belgica"
+        ]
+    },
+    {
+        "nombre": "belice",
+        "continente": "América",
+        "codigo": "BZ",
+        "alias": []
+    },
+    {
+        "nombre": "benín",
+        "continente": "África",
+        "codigo": "BJ",
+        "alias": [
+            "benin",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "bermudas",
+        "continente": "América",
+        "codigo": "BM",
+        "alias": []
+    },
+    {
+        "nombre": "bielorrusia",
+        "continente": "Europa",
+        "codigo": "BY",
+        "alias": []
+    },
+    {
+        "nombre": "bolivia",
+        "continente": "América",
+        "codigo": "BO",
+        "alias": []
+    },
+    {
+        "nombre": "bosnia y herzegovina",
+        "continente": "Europa",
+        "codigo": "BA",
+        "alias": []
+    },
+    {
+        "nombre": "botsuana",
+        "continente": "África",
+        "codigo": "BW",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "brasil",
+        "continente": "América",
+        "codigo": "BR",
+        "alias": []
+    },
+    {
+        "nombre": "brunéi",
+        "continente": "Asia",
+        "codigo": "BN",
+        "alias": [
+            "brunei"
+        ]
+    },
+    {
+        "nombre": "bulgaria",
+        "continente": "Europa",
+        "codigo": "BG",
+        "alias": []
+    },
+    {
+        "nombre": "burkina faso",
+        "continente": "África",
+        "codigo": "BF",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "burundi",
+        "continente": "África",
+        "codigo": "BI",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "bután",
+        "continente": "Asia",
+        "codigo": "BT",
+        "alias": [
+            "butan"
+        ]
+    },
+    {
+        "nombre": "cabo verde",
+        "continente": "África",
+        "codigo": "CV",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "camboya",
+        "continente": "Asia",
+        "codigo": "KH",
+        "alias": []
+    },
+    {
+        "nombre": "camerún",
+        "continente": "África",
+        "codigo": "CM",
+        "alias": [
+            "camerun",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "canadá",
+        "continente": "América",
+        "codigo": "CA",
+        "alias": [
+            "canada"
+        ]
+    },
+    {
+        "nombre": "catar",
+        "continente": "Asia",
+        "codigo": "QA",
+        "alias": []
+    },
+    {
+        "nombre": "chad",
+        "continente": "África",
+        "codigo": "TD",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "chile",
+        "continente": "América",
+        "codigo": "CL",
+        "alias": [
+            "zona franca iquique"
+        ]
+    },
+    {
+        "nombre": "china",
+        "continente": "Asia",
+        "codigo": "CN",
+        "alias": []
+    },
+    {
+        "nombre": "chipre",
+        "continente": "Europa",
+        "codigo": "CY",
+        "alias": []
+    },
+    {
+        "nombre": "colombia",
+        "continente": "América",
+        "codigo": "CO",
+        "alias": []
+    },
+    {
+        "nombre": "comoras",
+        "continente": "África",
+        "codigo": "KM",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "corea del norte",
+        "continente": "Asia",
+        "codigo": "KP",
+        "alias": []
+    },
+    {
+        "nombre": "corea del sur",
+        "continente": "Asia",
+        "codigo": "KR",
+        "alias": []
+    },
+    {
+        "nombre": "costa de marfil",
+        "continente": "África",
+        "codigo": "CI",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "costa rica",
+        "continente": "América",
+        "codigo": "CR",
+        "alias": []
+    },
+    {
+        "nombre": "croacia",
+        "continente": "Europa",
+        "codigo": "HR",
+        "alias": []
+    },
+    {
+        "nombre": "cuba",
+        "continente": "América",
+        "codigo": "CU",
+        "alias": []
+    },
+    {
+        "nombre": "curazao",
+        "continente": "América",
+        "codigo": "CW",
+        "alias": []
+    },
+    {
+        "nombre": "dinamarca",
+        "continente": "Europa",
+        "codigo": "DK",
+        "alias": []
+    },
+    {
+        "nombre": "dominica",
+        "continente": "América",
+        "codigo": "DM",
+        "alias": []
+    },
+    {
+        "nombre": "ecuador",
+        "continente": "América",
+        "codigo": "EC",
+        "alias": []
+    },
+    {
+        "nombre": "egipto",
+        "continente": "África",
+        "codigo": "EG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "el salvador",
+        "continente": "América",
+        "codigo": "SV",
+        "alias": []
+    },
+    {
+        "nombre": "emiratos árabes unidos",
+        "continente": "Asia",
+        "codigo": "AE",
+        "alias": [
+            "emiratos arabes unidos"
+        ]
+    },
+    {
+        "nombre": "eritrea",
+        "continente": "África",
+        "codigo": "ER",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "eslovaquia",
+        "continente": "Europa",
+        "codigo": "SK",
+        "alias": []
+    },
+    {
+        "nombre": "eslovenia",
+        "continente": "Europa",
+        "codigo": "SI",
+        "alias": []
+    },
+    {
+        "nombre": "españa",
+        "continente": "Europa",
+        "codigo": "ES",
+        "alias": [
+            "espana"
+        ]
+    },
+    {
+        "nombre": "estados unidos",
+        "continente": "América",
+        "codigo": "US",
+        "alias": [
+            "u.s.a",
+            "usa"
+        ]
+    },
+    {
+        "nombre": "estonia",
+        "continente": "Europa",
+        "codigo": "EE",
+        "alias": []
+    },
+    {
+        "nombre": "etiopía",
+        "continente": "África",
+        "codigo": "ET",
+        "alias": [
+            "etiopia",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "filipinas",
+        "continente": "Asia",
+        "codigo": "PH",
+        "alias": []
+    },
+    {
+        "nombre": "finlandia",
+        "continente": "Europa",
+        "codigo": "FI",
+        "alias": []
+    },
+    {
+        "nombre": "fiyi",
+        "continente": "Oceanía",
+        "codigo": "FJ",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "francia",
+        "continente": "Europa",
+        "codigo": "FR",
+        "alias": []
+    },
+    {
+        "nombre": "gabón",
+        "continente": "África",
+        "codigo": "GA",
+        "alias": [
+            "gabon",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "gambia",
+        "continente": "África",
+        "codigo": "GM",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "georgia",
+        "continente": "Asia",
+        "codigo": "GE",
+        "alias": []
+    },
+    {
+        "nombre": "ghana",
+        "continente": "África",
+        "codigo": "GH",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "gibraltar",
+        "continente": "Europa",
+        "codigo": "GI",
+        "alias": []
+    },
+    {
+        "nombre": "granada",
+        "continente": "América",
+        "codigo": "GD",
+        "alias": []
+    },
+    {
+        "nombre": "grecia",
+        "continente": "Europa",
+        "codigo": "GR",
+        "alias": []
+    },
+    {
+        "nombre": "groenlandia",
+        "continente": "América",
+        "codigo": "GL",
+        "alias": []
+    },
+    {
+        "nombre": "guadalupe",
+        "continente": "América",
+        "codigo": "GP",
+        "alias": []
+    },
+    {
+        "nombre": "guam",
+        "continente": "Oceanía",
+        "codigo": "GU",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "guatemala",
+        "continente": "América",
+        "codigo": "GT",
+        "alias": []
+    },
+    {
+        "nombre": "guayana francesa",
+        "continente": "América",
+        "codigo": "GF",
+        "alias": []
+    },
+    {
+        "nombre": "guernsey",
+        "continente": "Europa",
+        "codigo": "GG",
+        "alias": []
+    },
+    {
+        "nombre": "guinea",
+        "continente": "África",
+        "codigo": "GN",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "guinea ecuatorial",
+        "continente": "África",
+        "codigo": "GQ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "guinea-bisáu",
+        "continente": "África",
+        "codigo": "GW",
+        "alias": [
+            "guinea-bisau",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "guyana",
+        "continente": "América",
+        "codigo": "GY",
+        "alias": []
+    },
+    {
+        "nombre": "haití",
+        "continente": "América",
+        "codigo": "HT",
+        "alias": [
+            "haiti"
+        ]
+    },
+    {
+        "nombre": "honduras",
+        "continente": "América",
+        "codigo": "HN",
+        "alias": []
+    },
+    {
+        "nombre": "hong kong",
+        "continente": "Asia",
+        "codigo": "HK",
+        "alias": []
+    },
+    {
+        "nombre": "hungría",
+        "continente": "Europa",
+        "codigo": "HU",
+        "alias": [
+            "hungria"
+        ]
+    },
+    {
+        "nombre": "india",
+        "continente": "Asia",
+        "codigo": "IN",
+        "alias": []
+    },
+    {
+        "nombre": "indonesia",
+        "continente": "Asia",
+        "codigo": "ID",
+        "alias": []
+    },
+    {
+        "nombre": "irak",
+        "continente": "Asia",
+        "codigo": "IQ",
+        "alias": []
+    },
+    {
+        "nombre": "irán",
+        "continente": "Asia",
+        "codigo": "IR",
+        "alias": [
+            "iran"
+        ]
+    },
+    {
+        "nombre": "irlanda",
+        "continente": "Europa",
+        "codigo": "IE",
+        "alias": []
+    },
+    {
+        "nombre": "isla de man",
+        "continente": "Europa",
+        "codigo": "IM",
+        "alias": []
+    },
+    {
+        "nombre": "isla de navidad",
+        "continente": "Asia",
+        "codigo": "CX",
+        "alias": []
+    },
+    {
+        "nombre": "islandia",
+        "continente": "Europa",
+        "codigo": "IS",
+        "alias": []
+    },
+    {
+        "nombre": "islas caimán",
+        "continente": "América",
+        "codigo": "KY",
+        "alias": [
+            "islas caiman"
+        ]
+    },
+    {
+        "nombre": "islas cocos",
+        "continente": "Asia",
+        "codigo": "CC",
+        "alias": []
+    },
+    {
+        "nombre": "islas cook",
+        "continente": "Oceanía",
+        "codigo": "CK",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "islas feroe",
+        "continente": "Europa",
+        "codigo": "FO",
+        "alias": []
+    },
+    {
+        "nombre": "islas georgias del sur y sandwich del sur",
+        "continente": "Antártida",
+        "codigo": "GS",
+        "alias": [
+            "antartida"
+        ]
+    },
+    {
+        "nombre": "islas malvinas",
+        "continente": "América",
+        "codigo": "FK",
+        "alias": []
+    },
+    {
+        "nombre": "islas marianas del norte",
+        "continente": "Oceanía",
+        "codigo": "MP",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "islas marshall",
+        "continente": "Oceanía",
+        "codigo": "MH",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "islas pitcairn",
+        "continente": "Oceanía",
+        "codigo": "PN",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "islas salomón",
+        "continente": "Oceanía",
+        "codigo": "SB",
+        "alias": [
+            "islas salomon",
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "islas turcas y caicos",
+        "continente": "América",
+        "codigo": "TC",
+        "alias": []
+    },
+    {
+        "nombre": "islas ultramarinas de estados unidos",
+        "continente": "América",
+        "codigo": "UM",
+        "alias": []
+    },
+    {
+        "nombre": "islas vírgenes británicas",
+        "continente": "América",
+        "codigo": "VG",
+        "alias": [
+            "islas virgenes britanicas"
+        ]
+    },
+    {
+        "nombre": "islas vírgenes de los estados unidos",
+        "continente": "América",
+        "codigo": "VI",
+        "alias": [
+            "islas virgenes de los estados unidos"
+        ]
+    },
+    {
+        "nombre": "israel",
+        "continente": "Asia",
+        "codigo": "IL",
+        "alias": []
+    },
+    {
+        "nombre": "italia",
+        "continente": "Europa",
+        "codigo": "IT",
+        "alias": []
+    },
+    {
+        "nombre": "jamaica",
+        "continente": "América",
+        "codigo": "JM",
+        "alias": []
+    },
+    {
+        "nombre": "japón",
+        "continente": "Asia",
+        "codigo": "JP",
+        "alias": [
+            "japon"
+        ]
+    },
+    {
+        "nombre": "jersey",
+        "continente": "Europa",
+        "codigo": "JE",
+        "alias": []
+    },
+    {
+        "nombre": "jordania",
+        "continente": "Asia",
+        "codigo": "JO",
+        "alias": []
+    },
+    {
+        "nombre": "kazajistán",
+        "continente": "Asia",
+        "codigo": "KZ",
+        "alias": [
+            "kazajistan"
+        ]
+    },
+    {
+        "nombre": "kenia",
+        "continente": "África",
+        "codigo": "KE",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "kirguistán",
+        "continente": "Asia",
+        "codigo": "KG",
+        "alias": [
+            "kirguistan"
+        ]
+    },
+    {
+        "nombre": "kiribati",
+        "continente": "Oceanía",
+        "codigo": "KI",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "kuwait",
+        "continente": "Asia",
+        "codigo": "KW",
+        "alias": []
+    },
+    {
+        "nombre": "laos",
+        "continente": "Asia",
+        "codigo": "LA",
+        "alias": []
+    },
+    {
+        "nombre": "lesoto",
+        "continente": "África",
+        "codigo": "LS",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "letonia",
+        "continente": "Europa",
+        "codigo": "LV",
+        "alias": []
+    },
+    {
+        "nombre": "líbano",
+        "continente": "Asia",
+        "codigo": "LB",
+        "alias": [
+            "libano"
+        ]
+    },
+    {
+        "nombre": "liberia",
+        "continente": "África",
+        "codigo": "LR",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "libia",
+        "continente": "África",
+        "codigo": "LY",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "liechtenstein",
+        "continente": "Europa",
+        "codigo": "LI",
+        "alias": []
+    },
+    {
+        "nombre": "lituania",
+        "continente": "Europa",
+        "codigo": "LT",
+        "alias": []
+    },
+    {
+        "nombre": "luxemburgo",
+        "continente": "Europa",
+        "codigo": "LU",
+        "alias": []
+    },
+    {
+        "nombre": "macao",
+        "continente": "Asia",
+        "codigo": "MO",
+        "alias": []
+    },
+    {
+        "nombre": "macedonia del norte",
+        "continente": "Europa",
+        "codigo": "MK",
+        "alias": []
+    },
+    {
+        "nombre": "madagascar",
+        "continente": "África",
+        "codigo": "MG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "malasia",
+        "continente": "Asia",
+        "codigo": "MY",
+        "alias": []
+    },
+    {
+        "nombre": "malaui",
+        "continente": "África",
+        "codigo": "MW",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "maldivas",
+        "continente": "Asia",
+        "codigo": "MV",
+        "alias": []
+    },
+    {
+        "nombre": "malí",
+        "continente": "África",
+        "codigo": "ML",
+        "alias": [
+            "mali",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "malta",
+        "continente": "Europa",
+        "codigo": "MT",
+        "alias": []
+    },
+    {
+        "nombre": "marruecos",
+        "continente": "África",
+        "codigo": "MA",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "martinica",
+        "continente": "América",
+        "codigo": "MQ",
+        "alias": []
+    },
+    {
+        "nombre": "mauricio",
+        "continente": "África",
+        "codigo": "MU",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "mauritania",
+        "continente": "África",
+        "codigo": "MR",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "mayotte",
+        "continente": "África",
+        "codigo": "YT",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "méxico",
+        "continente": "América",
+        "codigo": "MX",
+        "alias": [
+            "mexico"
+        ]
+    },
+    {
+        "nombre": "micronesia",
+        "continente": "Oceanía",
+        "codigo": "FM",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "moldavia",
+        "continente": "Europa",
+        "codigo": "MD",
+        "alias": []
+    },
+    {
+        "nombre": "mónaco",
+        "continente": "Europa",
+        "codigo": "MC",
+        "alias": [
+            "monaco"
+        ]
+    },
+    {
+        "nombre": "mongolia",
+        "continente": "Asia",
+        "codigo": "MN",
+        "alias": []
+    },
+    {
+        "nombre": "montenegro",
+        "continente": "Europa",
+        "codigo": "ME",
+        "alias": []
+    },
+    {
+        "nombre": "montserrat",
+        "continente": "América",
+        "codigo": "MS",
+        "alias": []
+    },
+    {
+        "nombre": "mozambique",
+        "continente": "África",
+        "codigo": "MZ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "myanmar",
+        "continente": "Asia",
+        "codigo": "MM",
+        "alias": []
+    },
+    {
+        "nombre": "namibia",
+        "continente": "África",
+        "codigo": "NA",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "nauru",
+        "continente": "Oceanía",
+        "codigo": "NR",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "nepal",
+        "continente": "Asia",
+        "codigo": "NP",
+        "alias": []
+    },
+    {
+        "nombre": "nicaragua",
+        "continente": "América",
+        "codigo": "NI",
+        "alias": []
+    },
+    {
+        "nombre": "níger",
+        "continente": "África",
+        "codigo": "NE",
+        "alias": [
+            "niger",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "nigeria",
+        "continente": "África",
+        "codigo": "NG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "niue",
+        "continente": "Oceanía",
+        "codigo": "NU",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "noruega",
+        "continente": "Europa",
+        "codigo": "NO",
+        "alias": []
+    },
+    {
+        "nombre": "nueva caledonia",
+        "continente": "Oceanía",
+        "codigo": "NC",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "nueva zelanda",
+        "continente": "Oceanía",
+        "codigo": "NZ",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "omán",
+        "continente": "Asia",
+        "codigo": "OM",
+        "alias": [
+            "oman"
+        ]
+    },
+    {
+        "nombre": "países bajos",
+        "continente": "Europa",
+        "codigo": "NL",
+        "alias": [
+            "paises bajos",
+            "holanda"
+        ]
+    },
+    {
+        "nombre": "pakistán",
+        "continente": "Asia",
+        "codigo": "PK",
+        "alias": [
+            "pakistan"
+        ]
+    },
+    {
+        "nombre": "palaos",
+        "continente": "Oceanía",
+        "codigo": "PW",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "palestina",
+        "continente": "Asia",
+        "codigo": "PS",
+        "alias": []
+    },
+    {
+        "nombre": "panamá",
+        "continente": "América",
+        "codigo": "PA",
+        "alias": [
+            "panama"
+        ]
+    },
+    {
+        "nombre": "papúa nueva guinea",
+        "continente": "Oceanía",
+        "codigo": "PG",
+        "alias": [
+            "papua nueva guinea",
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "paraguay",
+        "continente": "América",
+        "codigo": "PY",
+        "alias": []
+    },
+    {
+        "nombre": "perú",
+        "continente": "América",
+        "codigo": "PE",
+        "alias": [
+            "peru"
+        ]
+    },
+    {
+        "nombre": "polinesia francesa",
+        "continente": "Oceanía",
+        "codigo": "PF",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "polonia",
+        "continente": "Europa",
+        "codigo": "PL",
+        "alias": []
+    },
+    {
+        "nombre": "portugal",
+        "continente": "Europa",
+        "codigo": "PT",
+        "alias": []
+    },
+    {
+        "nombre": "puerto rico",
+        "continente": "América",
+        "codigo": "PR",
+        "alias": []
+    },
+    {
+        "nombre": "reino unido",
+        "continente": "Europa",
+        "codigo": "GB",
+        "alias": []
+    },
+    {
+        "nombre": "república centroafricana",
+        "continente": "África",
+        "codigo": "CF",
+        "alias": [
+            "republica centroafricana",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "república checa",
+        "continente": "Europa",
+        "codigo": "CZ",
+        "alias": []
+    },
+    {
+        "nombre": "república del congo",
+        "continente": "África",
+        "codigo": "CG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "república democrática del congo",
+        "continente": "África",
+        "codigo": "CD",
+        "alias": [
+            "republica democratica del congo",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "república dominicana",
+        "continente": "América",
+        "codigo": "DO",
+        "alias": []
+    },
+    {
+        "nombre": "reunión",
+        "continente": "África",
+        "codigo": "RE",
+        "alias": [
+            "reunion",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "ruanda",
+        "continente": "África",
+        "codigo": "RW",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "rumanía",
+        "continente": "Europa",
+        "codigo": "RO",
+        "alias": [
+            "rumania"
+        ]
+    },
+    {
+        "nombre": "rusia",
+        "continente": "Europa",
+        "codigo": "RU",
+        "alias": []
+    },
+    {
+        "nombre": "samoa",
+        "continente": "Oceanía",
+        "codigo": "WS",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "samoa americana",
+        "continente": "Oceanía",
+        "codigo": "AS",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "san bartolomé",
+        "continente": "América",
+        "codigo": "BL",
+        "alias": [
+            "san bartolome"
+        ]
+    },
+    {
+        "nombre": "san cristóbal y nieves",
+        "continente": "América",
+        "codigo": "KN",
+        "alias": [
+            "san cristobal y nieves"
+        ]
+    },
+    {
+        "nombre": "san marino",
+        "continente": "Europa",
+        "codigo": "SM",
+        "alias": []
+    },
+    {
+        "nombre": "san martín",
+        "continente": "América",
+        "codigo": "MF",
+        "alias": [
+            "san martin"
+        ]
+    },
+    {
+        "nombre": "san pedro y miquelón",
+        "continente": "América",
+        "codigo": "PM",
+        "alias": [
+            "san pedro y miquelon"
+        ]
+    },
+    {
+        "nombre": "san vicente y las granadinas",
+        "continente": "América",
+        "codigo": "VC",
+        "alias": []
+    },
+    {
+        "nombre": "santa elena",
+        "continente": "África",
+        "codigo": "SH",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "santa lucía",
+        "continente": "América",
+        "codigo": "LC",
+        "alias": [
+            "santa lucia"
+        ]
+    },
+    {
+        "nombre": "santo tomé y príncipe",
+        "continente": "África",
+        "codigo": "ST",
+        "alias": [
+            "santo tome y principe",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "senegal",
+        "continente": "África",
+        "codigo": "SN",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "serbia",
+        "continente": "Europa",
+        "codigo": "RS",
+        "alias": []
+    },
+    {
+        "nombre": "seychelles",
+        "continente": "África",
+        "codigo": "SC",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "sierra leona",
+        "continente": "África",
+        "codigo": "SL",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "singapur",
+        "continente": "Asia",
+        "codigo": "SG",
+        "alias": []
+    },
+    {
+        "nombre": "sint maarten",
+        "continente": "América",
+        "codigo": "SX",
+        "alias": []
+    },
+    {
+        "nombre": "siria",
+        "continente": "Asia",
+        "codigo": "SY",
+        "alias": []
+    },
+    {
+        "nombre": "somalia",
+        "continente": "África",
+        "codigo": "SO",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "sri lanka",
+        "continente": "Asia",
+        "codigo": "LK",
+        "alias": []
+    },
+    {
+        "nombre": "suazilandia",
+        "continente": "África",
+        "codigo": "SZ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "sudáfrica",
+        "continente": "África",
+        "codigo": "ZA",
+        "alias": [
+            "sudafrica",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "sudán",
+        "continente": "África",
+        "codigo": "SD",
+        "alias": [
+            "sudan",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "sudán del sur",
+        "continente": "África",
+        "codigo": "SS",
+        "alias": [
+            "sudan del sur",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "suecia",
+        "continente": "Europa",
+        "codigo": "SE",
+        "alias": []
+    },
+    {
+        "nombre": "suiza",
+        "continente": "Europa",
+        "codigo": "CH",
+        "alias": []
+    },
+    {
+        "nombre": "surinam",
+        "continente": "América",
+        "codigo": "SR",
+        "alias": []
+    },
+    {
+        "nombre": "svalbard y jan mayen",
+        "continente": "Europa",
+        "codigo": "SJ",
+        "alias": []
+    },
+    {
+        "nombre": "tailandia",
+        "continente": "Asia",
+        "codigo": "TH",
+        "alias": []
+    },
+    {
+        "nombre": "taiwán",
+        "continente": "Asia",
+        "codigo": "TW",
+        "alias": [
+            "taiwan"
+        ]
+    },
+    {
+        "nombre": "tanzania",
+        "continente": "África",
+        "codigo": "TZ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "tayikistán",
+        "continente": "Asia",
+        "codigo": "TJ",
+        "alias": [
+            "tayikistan"
+        ]
+    },
+    {
+        "nombre": "territorio británico del océano índico",
+        "continente": "Asia",
+        "codigo": "IO",
+        "alias": [
+            "territorio britanico del oceano indico"
+        ]
+    },
+    {
+        "nombre": "tierras australes y antárticas francesas",
+        "continente": "Antártida",
+        "codigo": "TF",
+        "alias": [
+            "tierras australes y antarticas francesas",
+            "antartida"
+        ]
+    },
+    {
+        "nombre": "timor oriental",
+        "continente": "Asia",
+        "codigo": "TL",
+        "alias": []
+    },
+    {
+        "nombre": "togo",
+        "continente": "África",
+        "codigo": "TG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "tokelau",
+        "continente": "Oceanía",
+        "codigo": "TK",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "tonga",
+        "continente": "Oceanía",
+        "codigo": "TO",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "trinidad y tobago",
+        "continente": "América",
+        "codigo": "TT",
+        "alias": []
+    },
+    {
+        "nombre": "túnez",
+        "continente": "África",
+        "codigo": "TN",
+        "alias": [
+            "tunez",
+            "africa"
+        ]
+    },
+    {
+        "nombre": "turkmenistán",
+        "continente": "Asia",
+        "codigo": "TM",
+        "alias": [
+            "turkmenistan"
+        ]
+    },
+    {
+        "nombre": "turquía",
+        "continente": "Asia",
+        "codigo": "TR",
+        "alias": [
+            "turquia"
+        ]
+    },
+    {
+        "nombre": "tuvalu",
+        "continente": "Oceanía",
+        "codigo": "TV",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "ucrania",
+        "continente": "Europa",
+        "codigo": "UA",
+        "alias": []
+    },
+    {
+        "nombre": "uganda",
+        "continente": "África",
+        "codigo": "UG",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "uruguay",
+        "continente": "América",
+        "codigo": "UY",
+        "alias": []
+    },
+    {
+        "nombre": "uzbekistán",
+        "continente": "Asia",
+        "codigo": "UZ",
+        "alias": [
+            "uzbekistan"
+        ]
+    },
+    {
+        "nombre": "vanuatu",
+        "continente": "Oceanía",
+        "codigo": "VU",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "vaticano",
+        "continente": "Europa",
+        "codigo": "VA",
+        "alias": []
+    },
+    {
+        "nombre": "venezuela",
+        "continente": "América",
+        "codigo": "VE",
+        "alias": []
+    },
+    {
+        "nombre": "vietnam",
+        "continente": "Asia",
+        "codigo": "VN",
+        "alias": []
+    },
+    {
+        "nombre": "wallis y futuna",
+        "continente": "Oceanía",
+        "codigo": "WF",
+        "alias": [
+            "oceania"
+        ]
+    },
+    {
+        "nombre": "yemen",
+        "continente": "Asia",
+        "codigo": "YE",
+        "alias": []
+    },
+    {
+        "nombre": "yibuti",
+        "continente": "África",
+        "codigo": "DJ",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "zambia",
+        "continente": "África",
+        "codigo": "ZM",
+        "alias": [
+            "africa"
+        ]
+    },
+    {
+        "nombre": "zimbabue",
+        "continente": "África",
+        "codigo": "ZW",
+        "alias": [
+            "africa"
+        ]
+    }
+]
