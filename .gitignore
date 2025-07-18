@@ -16,3 +16,6 @@ catalogos/
 datos/processed_files.json
 datos/diccionario_referencia.json
 datos/arancel_clasificacion.json
+
+# Archivos de datos generados
+*.parquet

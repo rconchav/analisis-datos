@@ -1,0 +1,20 @@
+# .streamlit/config.toml
+
+# Indica que esta es la sección de configuración del tema
+[theme]
+
+# Color principal para elementos interactivos (botones, sliders, selectbox, etc.)
+# Puedes usar cualquier código de color hexadecimal.
+primaryColor="#1E88E5" # Un azul moderno
+
+# Color de fondo de la aplicación principal
+backgroundColor="#FFFFFF" # Blanco
+
+# Color de fondo de la barra lateral (sidebar)
+secondaryBackgroundColor="#F5F5F5" # Un gris muy claro
+
+# Color del texto principal
+textColor="#31333F" # Un negro suave
+
+# Tipografía (font) - Las opciones básicas son "sans serif", "serif", o "monospace"
+font="sans serif"

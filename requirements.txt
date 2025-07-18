@@ -1,3 +1,4 @@
+# requirements.txt
 streamlit
 pandas
 plotly
@@ -5,3 +6,4 @@ openpyxl
 fuzzywuzzy
 python-Levenshtein
 camelot-py[cv]
+pyarrow

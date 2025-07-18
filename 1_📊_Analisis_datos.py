@@ -20,10 +20,13 @@ from file_manager import cargar_log_procesados, ha_sido_procesado, actualizar_lo
 # --- Configuración de la Página ---
 st.set_page_config(layout="wide", page_title="Análisis de Importaciones")
 
-# --- Funciones de Caché ---
+# --- Rutas y Constantes ---
+PATH_DATOS_PROCESADOS = "datos/datos_procesados.parquet"
+
+# --- Funciones de Caché y Lógica de Procesamiento ---
 @st.cache_data
 def cargar_diccionario_filtros():
-    """Carga el diccionario de filtros (marcas/modelos) desde el archivo JSON."""
+    """Carga el diccionario de filtros desde el archivo JSON."""
     if os.path.exists('datos/diccionario_referencia.json'):
         with open('datos/diccionario_referencia.json', 'r', encoding='utf-8') as f:
             try:
@@ -32,20 +35,51 @@ def cargar_diccionario_filtros():
                 return {}
     return {}
 
-# --- Inicialización de Session State ---
+def ejecutar_proceso_completo():
+    """Encapsula la lógica de procesamiento para ser llamada desde múltiples botones."""
+    with st.spinner("Limpiando y analizando registros..."):
+        df_procesado = cargar_y_limpiar_datos()
+    if df_procesado is not None and not df_procesado.empty:
+        with st.spinner("Enriqueciendo y generando diccionario..."):
+            procesar_catalogos_externos()
+            generar_diccionario_desde_datos(df_procesado)
+        
+        try:
+            df_procesado.to_parquet(PATH_DATOS_PROCESADOS)
+            st.session_state['df_final'] = df_procesado
+            st.cache_data.clear()
+            st.success("¡Proceso completado y guardado para futuras sesiones!")
+        except Exception as e:
+            st.error(f"Error al guardar los datos procesados: {e}")
+            st.session_state['df_final'] = df_procesado
+    else:
+        st.error("El procesamiento de datos falló o no generó datos.")
+
+# --- Inicialización de Session State y Carga Persistente ---
 if 'df_final' not in st.session_state:
-    st.session_state['df_final'] = None
+    if os.path.exists(PATH_DATOS_PROCESADOS):
+        try:
+            st.session_state['df_final'] = pd.read_parquet(PATH_DATOS_PROCESADOS)
+        except Exception as e:
+            st.session_state['df_final'] = None
+    else:
+        st.session_state['df_final'] = None
 
-# --- CUERPO PRINCIPAL DE LA PÁGINA ---
+# --- Título Principal ---
 st.title("📈 Análisis de Importaciones")
-os.makedirs("input", exist_ok=True)
-os.makedirs("catalogos", exist_ok=True)
-os.makedirs("datos", exist_ok=True)
 
-# --- Sección Condicional de Carga y Procesamiento ---
-# Solo se muestra si no se han procesado datos todavía.
+# --- LÓGICA DE RENDERIZADO CONDICIONAL ---
+
+# CASO 1: No hay datos cargados, se muestra la pantalla de bienvenida y carga.
 if st.session_state['df_final'] is None:
-    with st.expander("▶️ Comenzar Aquí: Cargar y Procesar Datos", expanded=True):
+    st.header("Bienvenido al Analizador de Datos")
+    st.info("Para comenzar, carga tus archivos de importación y presiona el botón para procesar.")
+    
+    os.makedirs("input", exist_ok=True)
+    os.makedirs("catalogos", exist_ok=True)
+    os.makedirs("datos", exist_ok=True)
+
+    with st.expander("▶️ Cargar y Procesar Datos", expanded=True):
         log_procesados = cargar_log_procesados()
         col1, col2 = st.columns(2)
         with col1:
@@ -86,29 +120,30 @@ if st.session_state['df_final'] is None:
         
         st.markdown("---")
         st.header("Procesar Datos")
-        if st.button("🔄 Ejecutar Proceso Completo"):
-            with st.spinner("Limpiando y analizando registros..."):
-                df_procesado = cargar_y_limpiar_datos()
-            if df_procesado is not None and not df_procesado.empty:
-                with st.spinner("Enriqueciendo y generando diccionario..."):
-                    procesar_catalogos_externos()
-                    generar_diccionario_desde_datos(df_procesado)
-                
-                st.session_state['df_final'] = df_procesado
-                st.cache_data.clear()
-                st.success("¡Proceso completado!")
-                st.rerun()
-            else:
-                st.error("El procesamiento de datos falló.")
+        if st.button("Ejecutar Proceso Completo"):
+            ejecutar_proceso_completo()
+            st.rerun()
 
-# --- Sección Condicional de Visualización ---
-# Solo se muestra si los datos YA han sido procesados.
-if st.session_state['df_final'] is not None:
+# CASO 2: Los datos ya están cargados, se muestra el dashboard de análisis.
+else:
     df_final = st.session_state['df_final']
     diccionario_filtros = cargar_diccionario_filtros()
 
     with st.sidebar:
-        st.title("⚙️ Filtros y Configuración")
+        st.title("⚙️ Filtros y Acciones")
+        
+        st.subheader("Acciones")
+        if st.button("🔄 Reprocesar Datos Actuales", help="Vuelve a ejecutar el análisis sobre los archivos ya cargados."):
+            ejecutar_proceso_completo()
+            st.rerun()
+            
+        if st.button("📁 Cargar Nuevos Archivos (Reiniciar)", help="Vuelve a la pantalla inicial para cargar un nuevo set de datos."):
+            if os.path.exists(PATH_DATOS_PROCESADOS):
+                os.remove(PATH_DATOS_PROCESADOS)
+            st.session_state['df_final'] = None
+            st.cache_data.clear()
+            st.rerun()
+        st.markdown("---")
         
         filtros_secundarios_seleccionados = []
         filtro_principal_seleccionado = None

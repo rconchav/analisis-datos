@@ -1,0 +1,39 @@
+/* assets/style.css */
+
+/* --- Estilo para los selectores múltiples (ej: Continentes) --- */
+div[data-testid="stMultiSelect"] {
+    border: 1px solid #cccccc; /* Borde gris claro */
+    border-radius: 5px;      /* Bordes ligeramente redondeados */
+    padding: 5px;
+}
+
+/* --- Estilo para los botones estándar --- */
+div[data-testid="stButton"] > button {
+    background-color: transparent;   /* Fondo transparente */
+    color: #4F8BF9;                  /* Color del texto (puedes cambiarlo) */
+    border: 1px solid #cccccc;       /* Borde gris claro */
+    border-radius: 5px;
+    padding: 8px 16px;
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+div[data-testid="stButton"] > button:hover {
+    border-color: #4F8BF9;           /* El borde cambia de color */
+    color: #4F8BF9;
+}
+
+/* Botón presionado */
+div[data-testid="stButton"] > button:active {
+    background-color: #F0F2F6;       /* Un fondo sutil al hacer clic */
+}
+
+/* Estilo para los botones primarios (los de acción principal) */
+div[data-testid="stButton"] > button[kind="primary"] {
+    background-color: #4F8BF9;       /* Color de fondo principal */
+    color: white;                    /* Texto blanco */
+    border: none;                    /* Sin borde */
+}
+
+div[data-testid="stButton"] > button[kind="primary"]:hover {
+    background-color: #1E66C3;       /* Un tono más oscuro al pasar el mouse */
+}
