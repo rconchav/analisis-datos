@@ -7,8 +7,7 @@
         "id": "jp-mainmenu-view",
         "items": [
           {
-            "type": "separator",
-            "rank": 9.9
+            "type": "separator"
           },
           {
             "command": "logconsole:open",

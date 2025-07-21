@@ -14,12 +14,6 @@
       },
       "default": ["http", "https", "ftp", "mailto", "tel"]
     },
-    "autolink": {
-      "type": "boolean",
-      "title": "Autolink URL replacement",
-      "description": "Whether to replace URLs with links or not.",
-      "default": true
-    },
     "allowNamedProperties": {
       "type": "boolean",
       "title": "Allow named properties",

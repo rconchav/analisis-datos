@@ -1,0 +1,11 @@
+{
+    "mapeo_columnas": {
+        "Filtro Secundario": "PRODUCTO",
+        "Filtro Principal": "MARCA",
+        "Valor Num\u00e9rico": "CIF TOTAL",
+        "Pa\u00eds": "PA\u00cdS DE ORIGEN",
+        "A\u00f1o": "A\u00d1O",
+        "Mes": "MES",
+        "D\u00eda": "DIA"
+    }
+}

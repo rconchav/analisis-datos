@@ -1,6 +1,7 @@
 # Entorno Virtual de Python
 venv/
 .venv/
+venv_config/
 
 # Archivos de caché de Python
 __pycache__/

@@ -1,9 +1,10 @@
-# requirements.txt
+# requirements.txt - Para la aplicación principal de Streamlit
+
 streamlit
 pandas
 plotly
 openpyxl
+pyarrow
 fuzzywuzzy
 python-Levenshtein
 camelot-py[cv]
-pyarrow
