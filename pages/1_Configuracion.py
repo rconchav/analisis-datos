@@ -48,13 +48,16 @@ if os.path.exists(path_config_existente):
 # --- 2. GESTIÓN DE ARCHIVOS DE DATOS ---
 path_datos_proyecto = os.path.join("proyectos", proyecto_id, "data")
 os.makedirs(path_datos_proyecto, exist_ok=True)
+
 with st.container(border=True):
     st.markdown("<p style='color: #4682B4; font-weight: bold;'>Gestión de Archivos de Datos</p>", unsafe_allow_html=True)
     archivos_actuales = [f for f in os.listdir(path_datos_proyecto) if f.endswith('.xlsx')]
     if not archivos_actuales:
         st.info("Este proyecto aún no tiene archivos de datos.")
     else:
+        st.write("**Archivos actuales en el proyecto:**")
         for archivo in archivos_actuales: st.text(f"- {archivo}")
+    
     nuevos_archivos = st.file_uploader("Arrastra o selecciona nuevos archivos .xlsx para añadir al proyecto:", type="xlsx", accept_multiple_files=True)
     if nuevos_archivos:
         for archivo in nuevos_archivos:
@@ -76,7 +79,7 @@ if df_ejemplo is not None:
     st.header("Paso 1: Asignar Roles a las Columnas")
     mapeo_actual = {}
     columnas_disponibles = [""] + df_ejemplo.columns.tolist()
-    
+
     st.markdown("##### Roles de Datos Principales")
     roles_datos_keys = ["filtro_principal", "filtro_secundario_base", "segmentacion_base", "valor_numerico", "pais"]
     cols_datos = st.columns(len(roles_datos_keys))
@@ -86,7 +89,7 @@ if df_ejemplo is not None:
             indice = columnas_disponibles.index(valor_actual) if valor_actual in columnas_disponibles else 0
             valor_seleccionado = st.selectbox(rol.replace("_", " ").title(), columnas_disponibles, index=indice)
             if valor_seleccionado: mapeo_actual[rol] = valor_seleccionado
-    
+
     st.markdown("---")
     st.markdown("##### Configuración de Fecha")
     config_fecha_actual = mapeo_guardado.get('config_fecha', {})
@@ -122,36 +125,46 @@ if df_ejemplo is not None:
     col1, col2, col3, col4 = st.columns([2.5, 2, 0.5, 0.5])
     with col1:
         sensibilidad = st.slider("Ajuste la sensibilidad de limpieza de datos", 70, 100, 90, help="Define qué tan parecidas deben ser las palabras para agruparlas (Fuzzy).")
-    
-    # --- LÓGICA DE BOTONES Y MENSAJES CORREGIDA ---
-    status_placeholder = st.empty() # Contenedor para los mensajes
-    
     with col3:
         if st.button("💾", type="primary", use_container_width=True, help="Guardar la configuración de mapeo actual"):
             with open(path_config_existente, 'w', encoding='utf-8') as f: json.dump({"mapeo_columnas": mapeo_actual}, f, indent=4)
-            status_placeholder.success("¡Mapeo guardado con éxito!", icon="✅")
-            time.sleep(2)
+            st.session_state.status_message = "¡Mapeo guardado!"; st.session_state.status_type = "success"
             st.rerun()
-
     with col4:
         if st.button("🚀", use_container_width=True, help="Iniciar el proceso de limpieza y procesamiento de datos"):
             if not os.path.exists(path_config_existente) or os.path.getsize(path_config_existente) < 10:
-                status_placeholder.error("Error: Guarda el mapeo primero.", icon="🚨")
+                st.session_state.status_message = "Error: Guarda el mapeo primero."; st.session_state.status_type = "error"
             else:
                 try:
-                    # Mensaje de "procesando" en el recuadro inferior
-                    status_placeholder.info("Procesando datos...", icon="⏳")
-                    df_final = cargar_y_limpiar_datos(proyecto_id, sensibilidad_fuzzy=sensibilidad)
-                    
+                    with st.spinner("Procesando datos..."):
+                        df_final = cargar_y_limpiar_datos(proyecto_id, sensibilidad_fuzzy=sensibilidad)
                     if df_final is not None and not df_final.empty:
                         path_salida = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
                         df_final.to_parquet(path_salida)
                         st.cache_data.clear()
-                        # Mensaje de éxito en el mismo recuadro
-                        status_placeholder.success(f"¡Proceso completado! Se procesaron {len(df_final)} registros. Redirigiendo...", icon="✅")
-                        time.sleep(2)
-                        st.switch_page("pages/3_Reportes.py")
+                        st.session_state.status_message = f"¡Proceso completado! Se procesaron {len(df_final)} registros. Redirigiendo a reportes..."
+                        st.session_state.status_type = "success"
+                        st.session_state.navigate_to_reports = True
                     else:
-                        status_placeholder.warning("El proceso de limpieza no generó datos. Revisa la configuración y los archivos.", icon="⚠️")
+                        st.session_state.status_message = "El proceso de limpieza no generó datos. Revisa la configuración y los archivos."; st.session_state.status_type = "warning"
                 except Exception as e:
-                    status_placeholder.error(f"Ocurrió un error: {e}", icon="🚨")
+                    st.session_state.status_message = f"Ocurrió un error: {e}"; st.session_state.status_type = "error"
+            st.rerun()
+
+# --- RECUADRO DE MENSAJES Y NAVEGACIÓN ---
+st.markdown("---")
+status_placeholder = st.empty()
+if "status_message" in st.session_state and st.session_state.status_message:
+    message = st.session_state.status_message
+    msg_type = st.session_state.status_type
+    if msg_type == "success": status_placeholder.success(message, icon="✅")
+    elif msg_type == "error": status_placeholder.error(message, icon="🚨")
+    elif msg_type == "warning": status_placeholder.warning(message, icon="⚠️")
+    else: status_placeholder.info(message, icon="ℹ️")
+    st.session_state.status_message = None
+    st.session_state.status_type = None
+
+if st.session_state.get("navigate_to_reports"):
+    del st.session_state.navigate_to_reports
+    time.sleep(1)
+    st.switch_page("pages/3_Reportes.py")

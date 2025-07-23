@@ -5,7 +5,8 @@ import pandas as pd
 import os
 import re
 
-# --- CÓDIGO DE CONFIGURACIÓN DE PATH ---
+# --- CÓDIGO DE CONFIGURACIÓN DE PATH (SOLUCIÓN AL ERROR) ---
+# Este bloque DEBE estar al principio de todo.
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -14,12 +15,16 @@ from src.graficos import (
     generar_tabla_resumen, generar_grafico_barras_mensual,
     generar_ranking_marcas, generar_pie_paises,
     generar_detalle_repuestos, generar_grafico_arancel,
-    generar_grafico_clusters
+    generar_grafico_clusters, generar_grafico_pareto_principal
 )
 from src.utils import to_excel
 from src.diccionarios import cargar_diccionario
 
 st.set_page_config(layout="wide", page_title="Dashboard de Análisis")
+
+# --- Inicializar estado para el expander ---
+if 'run_cluster_analysis' not in st.session_state:
+    st.session_state.run_cluster_analysis = False
 
 # --- 1. VERIFICAR PROYECTO ACTIVO ---
 if 'proyecto_activo' not in st.session_state or st.session_state.proyecto_activo is None:
@@ -33,7 +38,6 @@ st.title(f"📊 Constructor de Reportes: `{proyecto_display_name}`")
 
 # --- 2. CARGAR DATOS PROCESADOS ---
 path_datos = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
-
 if not os.path.exists(path_datos):
     st.error("No se han procesado los datos para este proyecto.")
     st.info("Por favor, ve a la página de 'Configuración y Mapeo' y ejecuta el proceso de limpieza.")
@@ -41,7 +45,6 @@ if not os.path.exists(path_datos):
 
 @st.cache_data
 def cargar_dataframe(path):
-    """Carga el dataframe desde un archivo parquet, usando el caché de Streamlit."""
     return pd.read_parquet(path)
 
 df_final = cargar_dataframe(path_datos)
@@ -50,8 +53,7 @@ diccionario_filtros = cargar_diccionario(proyecto_id)
 # --- 3. BARRA LATERAL DE FILTROS ---
 with st.sidebar:
     st.title("⚙️ Filtros")
-
-    if st.button("🔄 Refrescar Datos", use_container_width=True, help="Haz clic aquí si los datos parecen desactualizados después de hacer cambios en la página de Inteligencia."):
+    if st.button("🔄 Refrescar Datos", use_container_width=True, help="Haz clic aquí si los datos parecen desactualizados."):
         st.cache_data.clear()
         st.rerun()
 
@@ -77,13 +79,11 @@ with st.sidebar:
     min_fecha = df_final['fecha'].min().date()
     max_fecha = df_final['fecha'].max().date()
     fecha_inicio, fecha_fin = st.date_input("Rango de Fechas", value=[min_fecha, max_fecha], min_value=min_fecha, max_value=max_fecha)
-
-    # --- BOTÓN DE DESCARGA ---
+    
     st.markdown("---")
     st.subheader("Exportar")
-    df_para_descargar = df_final.copy() # Se crea una copia para aplicar filtros de descarga
-    
-    # Esta sección aplica los filtros al df_para_descargar
+    # Se crea una copia para aplicar los filtros de descarga.
+    df_para_descargar = df_final.copy() 
     if segmentos_seleccionados: df_para_descargar = df_para_descargar[df_para_descargar['segmento_producto'].isin(segmentos_seleccionados)]
     if filtro_principal_seleccionado:
         df_para_descargar = df_para_descargar[df_para_descargar['filtro_principal'] == filtro_principal_seleccionado]
@@ -103,7 +103,6 @@ with st.sidebar:
         )
 
 # --- 4. APLICAR FILTROS AL DATAFRAME PARA VISUALIZACIÓN ---
-# Se usan los mismos filtros para el df_filtrado que se muestra en pantalla
 df_filtrado = df_para_descargar.copy()
 
 # --- 5. MOSTRAR RESULTADOS ---
@@ -113,12 +112,13 @@ else:
     st.header("Resultados del Análisis")
     st.caption(f"Período: `{fecha_inicio.strftime('%d-%m-%Y')}` a `{fecha_fin.strftime('%d-%m-%Y')}`")
     
-    with st.expander("🔬 Ver Análisis de Clusters (Agrupación Automática)"):
+    with st.expander("🔬 Ver Análisis de Clusters", expanded=st.session_state.run_cluster_analysis):
         generar_grafico_clusters(df_filtrado)
 
     st.markdown("---")
     
     generar_tabla_resumen(df_filtrado)
+    generar_grafico_pareto_principal(df_filtrado) 
     generar_grafico_barras_mensual(df_filtrado)
     col_g1, col_g2 = st.columns(2)
     with col_g1: generar_ranking_marcas(df_filtrado)

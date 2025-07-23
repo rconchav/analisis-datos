@@ -40,7 +40,6 @@ proyecto_activo_dict = st.session_state.proyecto_activo
 proyecto_id = proyecto_activo_dict['id']
 proyecto_display_name = proyecto_activo_dict['display_name']
 st.title(f"🧠 Gestión de Inteligencia para: `{proyecto_display_name}`")
-st.markdown("Entrena a la aplicación para que entienda y clasifique mejor tus datos.")
 
 # --- Contenedor con Pestañas ---
 tab1, tab2 = st.tabs(["📖 Gestor del Diccionario de Filtros", "🏷️ Gestor de Reglas de Segmentación"])
@@ -99,7 +98,11 @@ with tab1:
     path_datos_procesados = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
     if os.path.exists(path_datos_procesados):
         df_procesado = pd.read_parquet(path_datos_procesados)
-        generar_tabla_resumen_interactiva(df_procesado)
+        response = generar_tabla_resumen_interactiva(df_procesado)
+        if response and response.get("cellCopied"):
+            valor_copiado = response['cellCopied']['value']
+            st.toast(f"'{valor_copiado}' copiado al portapapeles.", icon="📋")
+
     else:
         st.info("Procesa los datos al menos una vez en la página de 'Configuración' para ver el resumen interactivo aquí.")
 
@@ -184,8 +187,3 @@ st.markdown("---")
 status_placeholder = st.empty()
 if "status_message" in st.session_state:
     message = st.session_state.status_message; msg_type = st.session_state.status_type
-    if msg_type == "success": status_placeholder.success(message, icon="✅")
-    elif msg_type == "error": status_placeholder.error(message, icon="🚨")
-    elif msg_type == "warning": status_placeholder.warning(message, icon="⚠️")
-    else: status_placeholder.info(message, icon="ℹ️")
-    del st.session_state.status_message; del st.session_state.status_type

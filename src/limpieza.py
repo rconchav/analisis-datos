@@ -22,27 +22,28 @@ def cargar_y_limpiar_datos(proyecto_id, sensibilidad_fuzzy=90):
         st.error(f"Configuración para '{proyecto_id}' no encontrada o incompleta.")
         return None
 
-    # --- CAMBIO CLAVE AQUÍ: VERIFICACIÓN DE ARCHIVOS ---
+    # --- CAMBIO CLAVE: BUSCAR ARCHIVOS DENTRO DEL PROYECTO ---
     path_datos_proyecto = os.path.join("proyectos", proyecto_id, "data")
     if not os.path.exists(path_datos_proyecto):
         st.error("No se encontró la carpeta de datos para este proyecto.")
-        st.info("Por favor, vuelve a la página de 'Configuración' y carga los archivos de datos para este proyecto.")
         return None
         
     archivos_excel = glob.glob(os.path.join(path_datos_proyecto, '*.xlsx'))
     if not archivos_excel:
         st.error("No se encontraron archivos .xlsx en la carpeta de datos de este proyecto.")
-        st.info("Por favor, vuelve a la página de 'Configuración' y carga los archivos de datos que deseas analizar.")
         return None
     # --- FIN DEL CAMBIO ---
     
     try:
+        # Se leen y concatenan todos los archivos encontrados
         df = pd.concat([pd.read_excel(f, engine='openpyxl') for f in archivos_excel], ignore_index=True)
         df_limpio = df.copy()
     except Exception as e:
         st.error(f"Error al leer los archivos Excel: {e}")
         return None
 
+    # ... (El resto de la función de limpieza no cambia) ...
+    # (Asegúrate de copiar el resto de tu función aquí)
     col_principal = mapeo.get('filtro_principal')
     col_secundario = mapeo.get('filtro_secundario_base')
     col_valor = mapeo.get('valor_numerico')
@@ -50,7 +51,7 @@ def cargar_y_limpiar_datos(proyecto_id, sensibilidad_fuzzy=90):
     config_fecha = mapeo.get('config_fecha', {})
 
     if not all([col_principal, col_secundario, col_valor, col_pais]):
-        st.error("El mapeo de columnas es inválido o está incompleto en el archivo de configuración.")
+        st.error("El mapeo de columnas es inválido o está incompleto.")
         return None
 
     col_segmentacion = mapeo.get('segmentacion_base', col_secundario)
