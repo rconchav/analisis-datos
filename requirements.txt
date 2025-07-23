@@ -1,10 +1,22 @@
-# requirements.txt - Para la aplicación principal de Streamlit
+# requirements.txt
 
+# Core de la aplicación y UI
 streamlit
+streamlit-aggrid
+
+# Manipulación y lectura de datos
 pandas
-plotly
-openpyxl
 pyarrow
+openpyxl
+
+# Visualización
+plotly
+
+# Limpieza de texto
 fuzzywuzzy
 python-Levenshtein
+
+# Para futura extracción de tablas desde PDFs (v3.1+)
+# NOTA: Requiere dependencias a nivel de sistema como Ghostscript.
 camelot-py[cv]
+scikit-learn

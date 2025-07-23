@@ -1,22 +1,29 @@
-# Entorno Virtual de Python
-venv/
-.venv/
-venv_config/
+# Entornos Virtuales de Python
+/venv/
+/.venv/
+/venv_config/
 
-# Archivos de caché de Python
-__pycache__/
+# Archivos de caché y temporales de Python
+/__pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Carpetas de datos del usuario
-input/
-catalogos/
+# Carpetas de datos de usuario (no deben estar en el repo)
+/input/
+/catalogos/
 
-# Archivos de datos generados por la aplicación
-datos/processed_files.json
-datos/diccionario_referencia.json
-datos/arancel_clasificacion.json
+# Carpeta de proyectos de usuario (contiene datos y configs sensibles)
+/proyectos/
 
-# Archivos de datos generados
+# Archivos de datos generados (se ignoran los resultados de los scripts)
+/datos/arancel_clasificacion.json
 *.parquet
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de IDE
+.vscode/
+.idea/
