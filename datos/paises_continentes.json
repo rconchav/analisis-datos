@@ -11,7 +11,9 @@
         "nombre": "albania",
         "continente": "Europa",
         "codigo": "AL",
-        "alias": []
+        "alias": [],
+        "latitud": 41.153332,
+        "longitud": 20.168331
     },
     {
         "nombre": "alemania",
@@ -23,7 +25,9 @@
         "nombre": "andorra",
         "continente": "Europa",
         "codigo": "AD",
-        "alias": []
+        "alias": [],
+        "latitud": 42.546245,
+        "longitud": 1.601554
     },
     {
         "nombre": "angola",
@@ -31,7 +35,9 @@
         "codigo": "AO",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -11.202692,
+        "longitud": 17.873887
     },
     {
         "nombre": "anguila",
@@ -71,19 +77,25 @@
         "nombre": "argentina",
         "continente": "América",
         "codigo": "AR",
-        "alias": []
+        "alias": [],
+        "latitud": -38.416097,
+        "longitud": -63.616672
     },
     {
         "nombre": "armenia",
         "continente": "Asia",
         "codigo": "AM",
-        "alias": []
+        "alias": [],
+        "latitud": 40.069099,
+        "longitud": 45.038189
     },
     {
         "nombre": "aruba",
         "continente": "América",
         "codigo": "AW",
-        "alias": []
+        "alias": [],
+        "latitud": 12.52111,
+        "longitud": -69.968338
     },
     {
         "nombre": "australia",
@@ -91,13 +103,17 @@
         "codigo": "AU",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -25.274398,
+        "longitud": 133.775136
     },
     {
         "nombre": "austria",
         "continente": "Europa",
         "codigo": "AT",
-        "alias": []
+        "alias": [],
+        "latitud": 47.516231,
+        "longitud": 14.550072
     },
     {
         "nombre": "azerbaiyán",
@@ -111,7 +127,9 @@
         "nombre": "bahamas",
         "continente": "América",
         "codigo": "BS",
-        "alias": []
+        "alias": [],
+        "latitud": 25.03428,
+        "longitud": -77.39628
     },
     {
         "nombre": "bangladés",
@@ -125,7 +143,9 @@
         "nombre": "barbados",
         "continente": "América",
         "codigo": "BB",
-        "alias": []
+        "alias": [],
+        "latitud": 13.193887,
+        "longitud": -59.543198
     },
     {
         "nombre": "baréin",
@@ -156,7 +176,9 @@
         "alias": [
             "benin",
             "africa"
-        ]
+        ],
+        "latitud": 9.30769,
+        "longitud": 2.315834
     },
     {
         "nombre": "bermudas",
@@ -174,7 +196,9 @@
         "nombre": "bolivia",
         "continente": "América",
         "codigo": "BO",
-        "alias": []
+        "alias": [],
+        "latitud": -16.290154,
+        "longitud": -63.588653
     },
     {
         "nombre": "bosnia y herzegovina",
@@ -202,13 +226,17 @@
         "codigo": "BN",
         "alias": [
             "brunei"
-        ]
+        ],
+        "latitud": 4.535277,
+        "longitud": 114.727669
     },
     {
         "nombre": "bulgaria",
         "continente": "Europa",
         "codigo": "BG",
-        "alias": []
+        "alias": [],
+        "latitud": 42.733883,
+        "longitud": 25.48583
     },
     {
         "nombre": "burkina faso",
@@ -216,7 +244,9 @@
         "codigo": "BF",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 12.238333,
+        "longitud": -1.561593
     },
     {
         "nombre": "burundi",
@@ -224,7 +254,9 @@
         "codigo": "BI",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -3.373056,
+        "longitud": 29.918886
     },
     {
         "nombre": "bután",
@@ -263,7 +295,9 @@
         "codigo": "CA",
         "alias": [
             "canada"
-        ]
+        ],
+        "latitud": 56.130366,
+        "longitud": -106.346771
     },
     {
         "nombre": "catar",
@@ -277,7 +311,9 @@
         "codigo": "TD",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 15.454166,
+        "longitud": 18.732207
     },
     {
         "nombre": "chile",
@@ -285,13 +321,17 @@
         "codigo": "CL",
         "alias": [
             "zona franca iquique"
-        ]
+        ],
+        "latitud": -35.675147,
+        "longitud": -71.542969
     },
     {
         "nombre": "china",
         "continente": "Asia",
         "codigo": "CN",
-        "alias": []
+        "alias": [],
+        "latitud": 35.86166,
+        "longitud": 104.195397
     },
     {
         "nombre": "chipre",
@@ -303,7 +343,9 @@
         "nombre": "colombia",
         "continente": "América",
         "codigo": "CO",
-        "alias": []
+        "alias": [],
+        "latitud": 4.570868,
+        "longitud": -74.297333
     },
     {
         "nombre": "comoras",
@@ -337,7 +379,9 @@
         "nombre": "costa rica",
         "continente": "América",
         "codigo": "CR",
-        "alias": []
+        "alias": [],
+        "latitud": 9.748917,
+        "longitud": -83.753428
     },
     {
         "nombre": "croacia",
@@ -349,7 +393,9 @@
         "nombre": "cuba",
         "continente": "América",
         "codigo": "CU",
-        "alias": []
+        "alias": [],
+        "latitud": 21.521757,
+        "longitud": -77.781167
     },
     {
         "nombre": "curazao",
@@ -367,13 +413,17 @@
         "nombre": "dominica",
         "continente": "América",
         "codigo": "DM",
-        "alias": []
+        "alias": [],
+        "latitud": 15.414999,
+        "longitud": -61.370976
     },
     {
         "nombre": "ecuador",
         "continente": "América",
         "codigo": "EC",
-        "alias": []
+        "alias": [],
+        "latitud": -1.831239,
+        "longitud": -78.183406
     },
     {
         "nombre": "egipto",
@@ -387,7 +437,9 @@
         "nombre": "el salvador",
         "continente": "América",
         "codigo": "SV",
-        "alias": []
+        "alias": [],
+        "latitud": 13.794185,
+        "longitud": -88.89653
     },
     {
         "nombre": "emiratos árabes unidos",
@@ -403,7 +455,9 @@
         "codigo": "ER",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 15.179384,
+        "longitud": 39.782334
     },
     {
         "nombre": "eslovaquia",
@@ -438,7 +492,9 @@
         "nombre": "estonia",
         "continente": "Europa",
         "codigo": "EE",
-        "alias": []
+        "alias": [],
+        "latitud": 58.595272,
+        "longitud": 25.013607
     },
     {
         "nombre": "etiopía",
@@ -482,7 +538,9 @@
         "alias": [
             "gabon",
             "africa"
-        ]
+        ],
+        "latitud": -0.803689,
+        "longitud": 11.609444
     },
     {
         "nombre": "gambia",
@@ -490,13 +548,17 @@
         "codigo": "GM",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 13.443182,
+        "longitud": -15.310139
     },
     {
         "nombre": "georgia",
         "continente": "Asia",
         "codigo": "GE",
-        "alias": []
+        "alias": [],
+        "latitud": 42.315407,
+        "longitud": 43.356892
     },
     {
         "nombre": "ghana",
@@ -504,13 +566,17 @@
         "codigo": "GH",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 7.946527,
+        "longitud": -1.023194
     },
     {
         "nombre": "gibraltar",
         "continente": "Europa",
         "codigo": "GI",
-        "alias": []
+        "alias": [],
+        "latitud": 36.137741,
+        "longitud": -5.345374
     },
     {
         "nombre": "granada",
@@ -542,13 +608,17 @@
         "codigo": "GU",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": 13.444304,
+        "longitud": 144.793731
     },
     {
         "nombre": "guatemala",
         "continente": "América",
         "codigo": "GT",
-        "alias": []
+        "alias": [],
+        "latitud": 15.783471,
+        "longitud": -90.230759
     },
     {
         "nombre": "guayana francesa",
@@ -560,7 +630,9 @@
         "nombre": "guernsey",
         "continente": "Europa",
         "codigo": "GG",
-        "alias": []
+        "alias": [],
+        "latitud": 49.465691,
+        "longitud": -2.585278
     },
     {
         "nombre": "guinea",
@@ -568,7 +640,9 @@
         "codigo": "GN",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 9.945587,
+        "longitud": -9.696645
     },
     {
         "nombre": "guinea ecuatorial",
@@ -591,7 +665,9 @@
         "nombre": "guyana",
         "continente": "América",
         "codigo": "GY",
-        "alias": []
+        "alias": [],
+        "latitud": 4.860416,
+        "longitud": -58.93018
     },
     {
         "nombre": "haití",
@@ -599,19 +675,25 @@
         "codigo": "HT",
         "alias": [
             "haiti"
-        ]
+        ],
+        "latitud": 18.971187,
+        "longitud": -72.285215
     },
     {
         "nombre": "honduras",
         "continente": "América",
         "codigo": "HN",
-        "alias": []
+        "alias": [],
+        "latitud": 15.199999,
+        "longitud": -86.241905
     },
     {
         "nombre": "hong kong",
         "continente": "Asia",
         "codigo": "HK",
-        "alias": []
+        "alias": [],
+        "latitud": 22.396428,
+        "longitud": 114.109497
     },
     {
         "nombre": "hungría",
@@ -625,13 +707,17 @@
         "nombre": "india",
         "continente": "Asia",
         "codigo": "IN",
-        "alias": []
+        "alias": [],
+        "latitud": 20.593684,
+        "longitud": 78.96288
     },
     {
         "nombre": "indonesia",
         "continente": "Asia",
         "codigo": "ID",
-        "alias": []
+        "alias": [],
+        "latitud": -0.789275,
+        "longitud": 113.921327
     },
     {
         "nombre": "irak",
@@ -645,7 +731,9 @@
         "codigo": "IR",
         "alias": [
             "iran"
-        ]
+        ],
+        "latitud": 32.427908,
+        "longitud": 53.688046
     },
     {
         "nombre": "irlanda",
@@ -778,7 +866,9 @@
         "nombre": "israel",
         "continente": "Asia",
         "codigo": "IL",
-        "alias": []
+        "alias": [],
+        "latitud": 31.046051,
+        "longitud": 34.851612
     },
     {
         "nombre": "italia",
@@ -790,7 +880,9 @@
         "nombre": "jamaica",
         "continente": "América",
         "codigo": "JM",
-        "alias": []
+        "alias": [],
+        "latitud": 18.109581,
+        "longitud": -77.297508
     },
     {
         "nombre": "japón",
@@ -804,7 +896,9 @@
         "nombre": "jersey",
         "continente": "Europa",
         "codigo": "JE",
-        "alias": []
+        "alias": [],
+        "latitud": 49.214439,
+        "longitud": -2.13125
     },
     {
         "nombre": "jordania",
@@ -842,19 +936,25 @@
         "codigo": "KI",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -3.370417,
+        "longitud": -168.734039
     },
     {
         "nombre": "kuwait",
         "continente": "Asia",
         "codigo": "KW",
-        "alias": []
+        "alias": [],
+        "latitud": 29.31166,
+        "longitud": 47.481766
     },
     {
         "nombre": "laos",
         "continente": "Asia",
         "codigo": "LA",
-        "alias": []
+        "alias": [],
+        "latitud": 19.85627,
+        "longitud": 102.495496
     },
     {
         "nombre": "lesoto",
@@ -884,7 +984,9 @@
         "codigo": "LR",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 6.428055,
+        "longitud": -9.429499
     },
     {
         "nombre": "libia",
@@ -898,7 +1000,9 @@
         "nombre": "liechtenstein",
         "continente": "Europa",
         "codigo": "LI",
-        "alias": []
+        "alias": [],
+        "latitud": 47.166,
+        "longitud": 9.555373
     },
     {
         "nombre": "lituania",
@@ -930,7 +1034,9 @@
         "codigo": "MG",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -18.766947,
+        "longitud": 46.869107
     },
     {
         "nombre": "malasia",
@@ -959,13 +1065,17 @@
         "alias": [
             "mali",
             "africa"
-        ]
+        ],
+        "latitud": 17.570692,
+        "longitud": -3.996166
     },
     {
         "nombre": "malta",
         "continente": "Europa",
         "codigo": "MT",
-        "alias": []
+        "alias": [],
+        "latitud": 35.937496,
+        "longitud": 14.375416
     },
     {
         "nombre": "marruecos",
@@ -995,7 +1105,9 @@
         "codigo": "MR",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 21.00789,
+        "longitud": -10.940835
     },
     {
         "nombre": "mayotte",
@@ -1003,7 +1115,9 @@
         "codigo": "YT",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -12.8275,
+        "longitud": 45.166244
     },
     {
         "nombre": "méxico",
@@ -1011,7 +1125,9 @@
         "codigo": "MX",
         "alias": [
             "mexico"
-        ]
+        ],
+        "latitud": 23.634501,
+        "longitud": -102.552784
     },
     {
         "nombre": "micronesia",
@@ -1019,7 +1135,9 @@
         "codigo": "FM",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": 7.425554,
+        "longitud": 150.550812
     },
     {
         "nombre": "moldavia",
@@ -1033,25 +1151,33 @@
         "codigo": "MC",
         "alias": [
             "monaco"
-        ]
+        ],
+        "latitud": 43.750298,
+        "longitud": 7.412841
     },
     {
         "nombre": "mongolia",
         "continente": "Asia",
         "codigo": "MN",
-        "alias": []
+        "alias": [],
+        "latitud": 46.862496,
+        "longitud": 103.846656
     },
     {
         "nombre": "montenegro",
         "continente": "Europa",
         "codigo": "ME",
-        "alias": []
+        "alias": [],
+        "latitud": 42.708678,
+        "longitud": 19.37439
     },
     {
         "nombre": "montserrat",
         "continente": "América",
         "codigo": "MS",
-        "alias": []
+        "alias": [],
+        "latitud": 16.742498,
+        "longitud": -62.187366
     },
     {
         "nombre": "mozambique",
@@ -1059,7 +1185,9 @@
         "codigo": "MZ",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -18.665695,
+        "longitud": 35.529562
     },
     {
         "nombre": "myanmar",
@@ -1073,7 +1201,9 @@
         "codigo": "NA",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -22.95764,
+        "longitud": 18.49041
     },
     {
         "nombre": "nauru",
@@ -1081,19 +1211,25 @@
         "codigo": "NR",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -0.522778,
+        "longitud": 166.931503
     },
     {
         "nombre": "nepal",
         "continente": "Asia",
         "codigo": "NP",
-        "alias": []
+        "alias": [],
+        "latitud": 28.394857,
+        "longitud": 84.124008
     },
     {
         "nombre": "nicaragua",
         "continente": "América",
         "codigo": "NI",
-        "alias": []
+        "alias": [],
+        "latitud": 12.865416,
+        "longitud": -85.207229
     },
     {
         "nombre": "níger",
@@ -1102,7 +1238,9 @@
         "alias": [
             "niger",
             "africa"
-        ]
+        ],
+        "latitud": 17.607789,
+        "longitud": 8.081666
     },
     {
         "nombre": "nigeria",
@@ -1110,7 +1248,9 @@
         "codigo": "NG",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 9.081999,
+        "longitud": 8.675277
     },
     {
         "nombre": "niue",
@@ -1118,7 +1258,9 @@
         "codigo": "NU",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -19.054445,
+        "longitud": -169.867233
     },
     {
         "nombre": "noruega",
@@ -1148,7 +1290,9 @@
         "codigo": "OM",
         "alias": [
             "oman"
-        ]
+        ],
+        "latitud": 21.512583,
+        "longitud": 55.923255
     },
     {
         "nombre": "países bajos",
@@ -1165,7 +1309,9 @@
         "codigo": "PK",
         "alias": [
             "pakistan"
-        ]
+        ],
+        "latitud": 30.375321,
+        "longitud": 69.345116
     },
     {
         "nombre": "palaos",
@@ -1187,7 +1333,9 @@
         "codigo": "PA",
         "alias": [
             "panama"
-        ]
+        ],
+        "latitud": 8.537981,
+        "longitud": -80.782127
     },
     {
         "nombre": "papúa nueva guinea",
@@ -1202,7 +1350,9 @@
         "nombre": "paraguay",
         "continente": "América",
         "codigo": "PY",
-        "alias": []
+        "alias": [],
+        "latitud": -23.442503,
+        "longitud": -58.443832
     },
     {
         "nombre": "perú",
@@ -1210,7 +1360,9 @@
         "codigo": "PE",
         "alias": [
             "peru"
-        ]
+        ],
+        "latitud": -9.189967,
+        "longitud": -75.015152
     },
     {
         "nombre": "polinesia francesa",
@@ -1230,13 +1382,17 @@
         "nombre": "portugal",
         "continente": "Europa",
         "codigo": "PT",
-        "alias": []
+        "alias": [],
+        "latitud": 39.399872,
+        "longitud": -8.224454
     },
     {
         "nombre": "puerto rico",
         "continente": "América",
         "codigo": "PR",
-        "alias": []
+        "alias": [],
+        "latitud": 18.220833,
+        "longitud": -66.590149
     },
     {
         "nombre": "reino unido",
@@ -1319,7 +1475,9 @@
         "codigo": "WS",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -13.759029,
+        "longitud": -172.104629
     },
     {
         "nombre": "samoa americana",
@@ -1349,7 +1507,9 @@
         "nombre": "san marino",
         "continente": "Europa",
         "codigo": "SM",
-        "alias": []
+        "alias": [],
+        "latitud": 43.94236,
+        "longitud": 12.457777
     },
     {
         "nombre": "san martín",
@@ -1404,13 +1564,17 @@
         "codigo": "SN",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 14.497401,
+        "longitud": -14.452362
     },
     {
         "nombre": "serbia",
         "continente": "Europa",
         "codigo": "RS",
-        "alias": []
+        "alias": [],
+        "latitud": 44.016521,
+        "longitud": 21.005859
     },
     {
         "nombre": "seychelles",
@@ -1418,7 +1582,9 @@
         "codigo": "SC",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -4.679574,
+        "longitud": 55.491977
     },
     {
         "nombre": "sierra leona",
@@ -1452,13 +1618,17 @@
         "codigo": "SO",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 5.152149,
+        "longitud": 46.199616
     },
     {
         "nombre": "sri lanka",
         "continente": "Asia",
         "codigo": "LK",
-        "alias": []
+        "alias": [],
+        "latitud": 7.873054,
+        "longitud": 80.771797
     },
     {
         "nombre": "suazilandia",
@@ -1484,7 +1654,9 @@
         "alias": [
             "sudan",
             "africa"
-        ]
+        ],
+        "latitud": 12.862807,
+        "longitud": 30.217636
     },
     {
         "nombre": "sudán del sur",
@@ -1531,7 +1703,9 @@
         "codigo": "TW",
         "alias": [
             "taiwan"
-        ]
+        ],
+        "latitud": 23.69781,
+        "longitud": 120.960515
     },
     {
         "nombre": "tanzania",
@@ -1539,7 +1713,9 @@
         "codigo": "TZ",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -6.369028,
+        "longitud": 34.888822
     },
     {
         "nombre": "tayikistán",
@@ -1578,7 +1754,9 @@
         "codigo": "TG",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 8.619543,
+        "longitud": 0.824782
     },
     {
         "nombre": "tokelau",
@@ -1586,7 +1764,9 @@
         "codigo": "TK",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -8.967363,
+        "longitud": -171.855881
     },
     {
         "nombre": "tonga",
@@ -1594,7 +1774,9 @@
         "codigo": "TO",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -21.178986,
+        "longitud": -175.198242
     },
     {
         "nombre": "trinidad y tobago",
@@ -1617,7 +1799,9 @@
         "codigo": "TM",
         "alias": [
             "turkmenistan"
-        ]
+        ],
+        "latitud": 38.969719,
+        "longitud": 59.556278
     },
     {
         "nombre": "turquía",
@@ -1633,7 +1817,9 @@
         "codigo": "TV",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -7.109535,
+        "longitud": 177.64933
     },
     {
         "nombre": "ucrania",
@@ -1647,13 +1833,17 @@
         "codigo": "UG",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": 1.373333,
+        "longitud": 32.290275
     },
     {
         "nombre": "uruguay",
         "continente": "América",
         "codigo": "UY",
-        "alias": []
+        "alias": [],
+        "latitud": -32.522779,
+        "longitud": -55.765835
     },
     {
         "nombre": "uzbekistán",
@@ -1661,7 +1851,9 @@
         "codigo": "UZ",
         "alias": [
             "uzbekistan"
-        ]
+        ],
+        "latitud": 41.377491,
+        "longitud": 64.585262
     },
     {
         "nombre": "vanuatu",
@@ -1669,7 +1861,9 @@
         "codigo": "VU",
         "alias": [
             "oceania"
-        ]
+        ],
+        "latitud": -15.376706,
+        "longitud": 166.959158
     },
     {
         "nombre": "vaticano",
@@ -1681,13 +1875,17 @@
         "nombre": "venezuela",
         "continente": "América",
         "codigo": "VE",
-        "alias": []
+        "alias": [],
+        "latitud": 6.42375,
+        "longitud": -66.58973
     },
     {
         "nombre": "vietnam",
         "continente": "Asia",
         "codigo": "VN",
-        "alias": []
+        "alias": [],
+        "latitud": 14.058324,
+        "longitud": 108.277199
     },
     {
         "nombre": "wallis y futuna",
@@ -1701,7 +1899,9 @@
         "nombre": "yemen",
         "continente": "Asia",
         "codigo": "YE",
-        "alias": []
+        "alias": [],
+        "latitud": 15.552727,
+        "longitud": 48.516388
     },
     {
         "nombre": "yibuti",
@@ -1717,7 +1917,9 @@
         "codigo": "ZM",
         "alias": [
             "africa"
-        ]
+        ],
+        "latitud": -13.133897,
+        "longitud": 27.849332
     },
     {
         "nombre": "zimbabue",

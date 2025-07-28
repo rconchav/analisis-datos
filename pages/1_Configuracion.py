@@ -6,165 +6,253 @@ import os
 import json
 import time
 
-# --- CÓDIGO DE CONFIGURACIÓN DE PATH ---
+# --- CÓDIGO DE CONFIGURACIÓN DE RUTA ---
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.limpieza import cargar_y_limpiar_datos
-from src.utils import manejar_columnas_duplicadas
+# --- Importaciones de la aplicación ---
+from src.file_manager import cargar_y_procesar_archivos
+from src.limpieza import limpiar_dataframe
+from src.utils import configurar_pagina
+from src.theme import configurar_tema
+from src.diccionarios import cargar_diccionario, guardar_diccionario
 
-st.set_page_config(layout="wide", page_title="Configuración de Proyecto")
+# --- CONFIGURACIÓN DE PÁGINA Y TEMA ---
+configurar_pagina(titulo_pagina="Configuración Dinámica")
+if 'theme_toggle' not in st.session_state:
+    st.session_state.theme_toggle = True
+tema_actual = "Oscuro" if st.session_state.theme_toggle else "Claro"
+configurar_tema(tema_actual)
 
-# --- FUNCIÓN PARA RESALTAR COLUMNAS ---
-def resaltar_columnas_mapeadas(df, mapeo):
-    df_estilizado = df.copy()
-    columnas_asignadas = [v for v in mapeo.values() if isinstance(v, str)]
-    if 'config_fecha' in mapeo and isinstance(mapeo.get('config_fecha'), dict):
-        columnas_asignadas.extend([v for k, v in mapeo['config_fecha'].items() if k != 'tipo' and isinstance(v, str)])
-    def resaltar(columna):
-        if columna.name in columnas_asignadas and columna.name != "":
-            return ['background-color: #d3f4d3'] * len(columna)
-        return [''] * len(columna)
-    return df_estilizado.style.apply(resaltar, axis=0)
-
-# --- 1. VERIFICAR PROYECTO ACTIVO ---
-if 'proyecto_activo' not in st.session_state or st.session_state.proyecto_activo is None:
-    st.warning("Por favor, selecciona o crea un proyecto en la página de '🏠 Inicio'.")
+# --- VERIFICACIÓN DE PROYECTO ACTIVO ---
+if 'proyecto_activo' not in st.session_state or not st.session_state.proyecto_activo:
+    st.warning("Por favor, selecciona un proyecto en la página de inicio para continuar.", icon="⚠️")
     st.stop()
-proyecto_id = st.session_state.proyecto_activo['id']
-proyecto_display_name = st.session_state.proyecto_activo['display_name']
-st.title(f"⚙️ Configuración y Mapeo para: `{proyecto_display_name}`")
 
-# --- CARGAR MAPEO GUARDADO ---
-path_config_existente = os.path.join("proyectos", proyecto_id, "config.json")
-mapeo_guardado = {}
-if os.path.exists(path_config_existente):
-    with open(path_config_existente, 'r', encoding='utf-8') as f:
-        try:
-            mapeo_guardado = json.load(f).get("mapeo_columnas", {})
-        except json.JSONDecodeError:
-            mapeo_guardado = {}
+proyecto_id = st.session_state.proyecto_activo
+proyecto_nombre = st.session_state.get('proyecto_activo_nombre', proyecto_id)
+diccionario = cargar_diccionario(proyecto_id)
+mapeo_guardado = diccionario.get('mapeo_dinamico', {})
 
-# --- 2. GESTIÓN DE ARCHIVOS DE DATOS ---
-path_datos_proyecto = os.path.join("proyectos", proyecto_id, "data")
-os.makedirs(path_datos_proyecto, exist_ok=True)
+# --- INICIALIZACIÓN DEL ESTADO DE LA SESIÓN ---
+if 'dynamic_mapping' not in st.session_state:
+    st.session_state.dynamic_mapping = {
+        "fechas": mapeo_guardado.get('fechas', []),
+        "filtros": mapeo_guardado.get('filtros', []),
+        "metricas": mapeo_guardado.get('metricas', [])
+    }
 
+st.title(f"⚙️ Configuración del Proyecto: {proyecto_nombre}")
+
+# --- SECCIÓN DE CARGA DE ARCHIVOS ---
 with st.container(border=True):
-    st.markdown("<p style='color: #4682B4; font-weight: bold;'>Gestión de Archivos de Datos</p>", unsafe_allow_html=True)
-    archivos_actuales = [f for f in os.listdir(path_datos_proyecto) if f.endswith('.xlsx')]
-    if not archivos_actuales:
-        st.info("Este proyecto aún no tiene archivos de datos.")
+    st.header("1. Carga de Archivos")
+    path_datos_procesados = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
+
+    modo_carga = st.radio(
+        "Modo de Carga",
+        ["Reemplazar datos existentes", "Anexar a datos existentes"],
+        index=0,
+        horizontal=True,
+        help="**Reemplazar**: Borra los datos anteriores. **Anexar**: Añade los nuevos datos a los ya procesados."
+    )
+
+    if os.path.exists(path_datos_procesados):
+        st.info(f"Este proyecto ya tiene datos procesados. El modo seleccionado es **{modo_carga.split(' ')[0]}**.")
     else:
-        st.write("**Archivos actuales en el proyecto:**")
-        for archivo in archivos_actuales: st.text(f"- {archivo}")
-    
-    nuevos_archivos = st.file_uploader("Arrastra o selecciona nuevos archivos .xlsx para añadir al proyecto:", type="xlsx", accept_multiple_files=True)
-    if nuevos_archivos:
-        for archivo in nuevos_archivos:
-            with open(os.path.join(path_datos_proyecto, archivo.name), "wb") as f: f.write(archivo.getbuffer())
-        st.success(f"{len(nuevos_archivos)} archivo(s) añadido(s) con éxito.")
-        st.rerun()
+        st.info("Este proyecto aún no tiene datos. Sube un archivo para comenzar.")
 
-# --- 3. INTERFAZ DE MAPEO ---
-df_ejemplo = None
-if archivos_actuales:
+    uploaded_file = st.file_uploader("Sube un archivo Excel (.xlsx)", type=['xlsx'])
+
+# --- LÓGICA PARA OBTENER COLUMNAS DE MUESTRA ---
+df_muestra = None
+columnas_disponibles = ["-"]
+path_datos_originales = os.path.join("proyectos", proyecto_id, "data")
+
+if uploaded_file:
     try:
-        lista_dfs = [pd.read_excel(os.path.join(path_datos_proyecto, f), nrows=5) for f in archivos_actuales]
-        df_ejemplo_full = pd.concat(lista_dfs, ignore_index=True)
-        df_ejemplo = manejar_columnas_duplicadas(df_ejemplo_full.copy())
+        df_muestra = pd.read_excel(uploaded_file, nrows=50)
+        columnas_disponibles = ["-"] + list(df_muestra.columns)
     except Exception as e:
-        st.error(f"Error al leer los archivos de ejemplo: {e}")
+        st.error(f"No se pudo leer el archivo subido. Error: {e}")
+        st.stop()
+elif os.path.exists(path_datos_originales) and os.listdir(path_datos_originales):
+    try:
+        primer_archivo = os.path.join(path_datos_originales, os.listdir(path_datos_originales)[0])
+        df_muestra = pd.read_excel(primer_archivo, nrows=50)
+        columnas_disponibles = ["-"] + list(df_muestra.columns)
+    except Exception as e:
+        st.warning(f"No se pudo leer el archivo de datos existente para la previsualización. Sube un archivo para continuar. Error: {e}")
 
-if df_ejemplo is not None:
-    st.header("Paso 1: Asignar Roles a las Columnas")
-    mapeo_actual = {}
-    columnas_disponibles = [""] + df_ejemplo.columns.tolist()
+# --- SECCIÓN DE MAPEADO ---
+with st.container(border=True):
+    st.header("2. Mapeo Dinámico de Columnas")
 
-    st.markdown("##### Roles de Datos Principales")
-    roles_datos_keys = ["filtro_principal", "filtro_secundario_base", "segmentacion_base", "valor_numerico", "pais"]
-    cols_datos = st.columns(len(roles_datos_keys))
-    for i, rol in enumerate(roles_datos_keys):
-        with cols_datos[i]:
-            valor_actual = mapeo_guardado.get(rol, "")
-            indice = columnas_disponibles.index(valor_actual) if valor_actual in columnas_disponibles else 0
-            valor_seleccionado = st.selectbox(rol.replace("_", " ").title(), columnas_disponibles, index=indice)
-            if valor_seleccionado: mapeo_actual[rol] = valor_seleccionado
+    if df_muestra is not None:
+        st.markdown("##### Previsualización de datos:")
+        st.dataframe(df_muestra.head(3))
+    else:
+        st.info("Sube un archivo para ver una previsualización y configurar el mapeo de columnas.")
 
-    st.markdown("---")
-    st.markdown("##### Configuración de Fecha")
-    config_fecha_actual = mapeo_guardado.get('config_fecha', {})
-    tipo_guardado = config_fecha_actual.get("tipo")
-    index_radio = 0
-    if tipo_guardado == 'Una sola columna': index_radio = 1
-    elif tipo_guardado == 'Columnas separadas': index_radio = 2
-    tipo_fecha = st.radio("Formato de fecha:", ("No usar fechas", "En una sola columna", "En columnas separadas"), index=index_radio, horizontal=True)
-    
-    mapeo_actual['config_fecha'] = {}
-    if tipo_fecha == "En una sola columna":
-        mapeo_actual['config_fecha']['tipo'] = 'Una sola columna'
-        valor = config_fecha_actual.get("fecha_completa", "")
-        indice = columnas_disponibles.index(valor) if valor in columnas_disponibles else 0
-        mapeo_actual['config_fecha']['fecha_completa'] = st.selectbox("Columna de Fecha Única", columnas_disponibles, index=indice)
-    elif tipo_fecha == "En columnas separadas":
-        mapeo_actual['config_fecha']['tipo'] = 'Columnas separadas'
-        cols_fecha = st.columns(3)
-        roles_fecha = {"Día": "dia", "Mes": "mes", "Año": "ano"}
-        for i, (display_name, key_name) in enumerate(roles_fecha.items()):
-            with cols_fecha[i]:
-                valor = config_fecha_actual.get(key_name, "")
-                indice = columnas_disponibles.index(valor) if valor in columnas_disponibles else 0
-                valor_sel_fecha = st.selectbox(display_name, columnas_disponibles, index=indice)
-                if valor_sel_fecha: mapeo_actual['config_fecha'][key_name] = valor_sel_fecha
+    if columnas_disponibles != ["-"]:
+        with st.container(border=True):
+            st.subheader("Campos de Fecha")
+            for i, fecha in enumerate(st.session_state.dynamic_mapping['fechas']):
+                st.markdown(f"---")
 
-    st.header("Paso 2: Vista Previa de los Datos con Resaltado Interactivo")
-    df_resaltado = resaltar_columnas_mapeadas(df_ejemplo.head(10), mapeo_actual)
-    st.dataframe(df_resaltado)
-    st.markdown("---")
-    
-    st.header("Paso 3: Guardar y Ejecutar")
-    col1, col2, col3, col4 = st.columns([2.5, 2, 0.5, 0.5])
-    with col1:
-        sensibilidad = st.slider("Ajuste la sensibilidad de limpieza de datos", 70, 100, 90, help="Define qué tan parecidas deben ser las palabras para agruparlas (Fuzzy).")
-    with col3:
-        if st.button("💾", type="primary", use_container_width=True, help="Guardar la configuración de mapeo actual"):
-            with open(path_config_existente, 'w', encoding='utf-8') as f: json.dump({"mapeo_columnas": mapeo_actual}, f, indent=4)
-            st.session_state.status_message = "¡Mapeo guardado!"; st.session_state.status_type = "success"
-            st.rerun()
-    with col4:
-        if st.button("🚀", use_container_width=True, help="Iniciar el proceso de limpieza y procesamiento de datos"):
-            if not os.path.exists(path_config_existente) or os.path.getsize(path_config_existente) < 10:
-                st.session_state.status_message = "Error: Guarda el mapeo primero."; st.session_state.status_type = "error"
-            else:
-                try:
-                    with st.spinner("Procesando datos..."):
-                        df_final = cargar_y_limpiar_datos(proyecto_id, sensibilidad_fuzzy=sensibilidad)
-                    if df_final is not None and not df_final.empty:
-                        path_salida = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
-                        df_final.to_parquet(path_salida)
-                        st.cache_data.clear()
-                        st.session_state.status_message = f"¡Proceso completado! Se procesaron {len(df_final)} registros. Redirigiendo a reportes..."
-                        st.session_state.status_type = "success"
-                        st.session_state.navigate_to_reports = True
-                    else:
-                        st.session_state.status_message = "El proceso de limpieza no generó datos. Revisa la configuración y los archivos."; st.session_state.status_type = "warning"
-                except Exception as e:
-                    st.session_state.status_message = f"Ocurrió un error: {e}"; st.session_state.status_type = "error"
-            st.rerun()
+                cols_header = st.columns([3, 1])
+                with cols_header[0]:
+                    fecha['nombre_personalizado'] = st.text_input(
+                        "Nombre del Campo de Fecha", 
+                        value=fecha.get('nombre_personalizado', f"Fecha_{i+1}"), 
+                        key=f"fecha_nombre_{i}"
+                    )
+                with cols_header[1]:
+                    if st.button("🗑️", key=f"fecha_del_{i}", use_container_width=True):
+                        st.session_state.dynamic_mapping['fechas'].pop(i)
+                        st.rerun()
 
-# --- RECUADRO DE MENSAJES Y NAVEGACIÓN ---
+                formato_guardado = fecha.get('formato', 'una_columna')
+                formato_index = 1 if formato_guardado == 'tres_columnas' else 0
+                formato = st.radio(
+                    "Formato", 
+                    ["Una columna", "Tres columnas"], 
+                    index=formato_index, 
+                    horizontal=True, 
+                    key=f"fecha_formato_{i}"
+                )
+                fecha['formato'] = "una_columna" if formato == "Una columna" else "tres_columnas"
+
+                columnas_guardadas = fecha.get('columnas', {})
+                if fecha['formato'] == "una_columna":
+                    sel_fecha = columnas_guardadas.get('fecha', '-')
+                    idx_fecha = columnas_disponibles.index(sel_fecha) if sel_fecha in columnas_disponibles else 0
+                    fecha['columnas'] = {'fecha': st.selectbox("Columna de Fecha", columnas_disponibles, index=idx_fecha, key=f"fecha_col_{i}")}
+                else:
+                    sel_dia, sel_mes, sel_ano = columnas_guardadas.get('dia', '-'), columnas_guardadas.get('mes', '-'), columnas_guardadas.get('año', '-')
+                    idx_dia = columnas_disponibles.index(sel_dia) if sel_dia in columnas_disponibles else 0
+                    idx_mes = columnas_disponibles.index(sel_mes) if sel_mes in columnas_disponibles else 0
+                    idx_ano = columnas_disponibles.index(sel_ano) if sel_ano in columnas_disponibles else 0
+                    cols_fecha_select = st.columns(3)
+                    fecha['columnas'] = {
+                        'dia': cols_fecha_select[0].selectbox("Día", columnas_disponibles, index=idx_dia, key=f"fecha_dia_{i}"),
+                        'mes': cols_fecha_select[1].selectbox("Mes", columnas_disponibles, index=idx_mes, key=f"fecha_mes_{i}"),
+                        'año': cols_fecha_select[2].selectbox("Año", columnas_disponibles, index=idx_ano, key=f"fecha_ano_{i}")
+                    }
+
+            if st.button("Añadir Campo de Fecha", use_container_width=True):
+                st.session_state.dynamic_mapping['fechas'].append({'nombre_personalizado': '', 'formato': 'una_columna', 'columnas': {}})
+                st.rerun()
+
+        with st.container(border=True):
+            st.subheader("Filtros (Dimensiones)")
+            for i, filtro in enumerate(st.session_state.dynamic_mapping['filtros']):
+                cols = st.columns([2, 2, 2, 1])
+                filtro['nombre_personalizado'] = cols[0].text_input("Nombre del Filtro", value=filtro.get('nombre_personalizado', ''), key=f"filtro_nombre_{i}")
+                sel_col = filtro.get('columna_original', '-')
+                idx_col = columnas_disponibles.index(sel_col) if sel_col in columnas_disponibles else 0
+                filtro['columna_original'] = cols[1].selectbox("Columna del Archivo", columnas_disponibles, index=idx_col, key=f"filtro_col_{i}")
+                sel_tipo = filtro.get('tipo_dato', 'Texto')
+                tipos_filtro = ["Texto", "País", "Arancel", "Latitud", "Longitud"]
+                idx_tipo = tipos_filtro.index(sel_tipo) if sel_tipo in tipos_filtro else 0
+                filtro['tipo_dato'] = cols[2].selectbox("Tipo de Dato", tipos_filtro, index=idx_tipo, key=f"filtro_tipo_{i}")
+                if cols[3].button("🗑️", key=f"filtro_del_{i}"):
+                    st.session_state.dynamic_mapping['filtros'].pop(i)
+                    st.rerun()
+            if st.button("Añadir Filtro", use_container_width=True):
+                st.session_state.dynamic_mapping['filtros'].append({})
+                st.rerun()
+
+        with st.container(border=True):
+            st.subheader("Métricas (Valores Numéricos)")
+            for i, metrica in enumerate(st.session_state.dynamic_mapping['metricas']):
+                cols = st.columns([2, 2, 2, 1])
+                metrica['nombre_personalizado'] = cols[0].text_input("Nombre de la Métrica", value=metrica.get('nombre_personalizado', ''), key=f"metrica_nombre_{i}")
+                sel_col = metrica.get('columna_original', '-')
+                idx_col = columnas_disponibles.index(sel_col) if sel_col in columnas_disponibles else 0
+                metrica['columna_original'] = cols[1].selectbox("Columna del Archivo", columnas_disponibles, index=idx_col, key=f"metrica_col_{i}")
+                sel_tipo = metrica.get('tipo_dato', 'Número')
+                tipos_metrica = ["Número", "Moneda"]
+                idx_tipo = tipos_metrica.index(sel_tipo) if sel_tipo in tipos_metrica else 0
+                metrica['tipo_dato'] = cols[2].selectbox("Tipo de Dato", tipos_metrica, index=idx_tipo, key=f"metrica_tipo_{i}")
+                if cols[3].button("🗑️", key=f"metrica_del_{i}"):
+                    st.session_state.dynamic_mapping['metricas'].pop(i)
+                    st.rerun()
+            if st.button("Añadir Métrica", use_container_width=True):
+                st.session_state.dynamic_mapping['metricas'].append({})
+                st.rerun()
+
+# --- SECCIÓN DE ACCIÓN ÚNICA: PROCESAR DATOS ---
 st.markdown("---")
-status_placeholder = st.empty()
-if "status_message" in st.session_state and st.session_state.status_message:
-    message = st.session_state.status_message
-    msg_type = st.session_state.status_type
-    if msg_type == "success": status_placeholder.success(message, icon="✅")
-    elif msg_type == "error": status_placeholder.error(message, icon="🚨")
-    elif msg_type == "warning": status_placeholder.warning(message, icon="⚠️")
-    else: status_placeholder.info(message, icon="ℹ️")
-    st.session_state.status_message = None
-    st.session_state.status_type = None
+if st.button("Procesar Datos", type="primary", use_container_width=True):
 
-if st.session_state.get("navigate_to_reports"):
-    del st.session_state.navigate_to_reports
-    time.sleep(1)
-    st.switch_page("pages/3_Reportes.py")
+    mapeo_actual = st.session_state.dynamic_mapping
+    diccionario['mapeo_dinamico'] = mapeo_actual
+    guardar_diccionario(proyecto_id, diccionario)
+    st.success("Configuración de mapeo guardada.")
+
+    if df_muestra is None and uploaded_file is None:
+        st.error("Debes subir un archivo o tener uno existente para poder procesar.", icon="🚨")
+        st.stop()
+
+    errores = []
+    advertencias = []
+
+    df_para_validar = df_muestra if df_muestra is not None else pd.DataFrame()
+
+    for tipo_campo, campos in mapeo_actual.items():
+        for i, campo in enumerate(campos):
+            columnas_a_chequear = list(campo.get('columnas', {}).values()) if tipo_campo == 'fechas' else [campo.get('columna_original')]
+            for col_name in columnas_a_chequear:
+                if col_name and col_name != "-" and col_name not in df_para_validar.columns:
+                    nombre = campo.get('nombre_personalizado') or f"Campo #{i+1}"
+                    errores.append(f"La columna '{col_name}' (mapeada en '{nombre}') no se encuentra en el archivo.")
+
+    if not errores:
+        for metrica in mapeo_actual['metricas']:
+            col_name = metrica.get('columna_original')
+            if col_name and col_name != "-" and col_name in df_para_validar.columns:
+                numericos = pd.to_numeric(df_para_validar[col_name], errors='coerce').notna()
+                if not numericos.all():
+                    porcentaje_no_numerico = (1 - numericos.mean()) * 100
+                    nombre = metrica.get('nombre_personalizado')
+                    advertencias.append(f"La columna **'{col_name}'** (en '{nombre}') contiene **{porcentaje_no_numerico:.1f}%** de valores no numéricos. Estas filas serán descartadas.")
+
+    if errores:
+        for error in errores: st.error(error, icon="🚨")
+    else:
+        confirmacion_necesaria = bool(advertencias)
+        confirmado = False
+        if confirmacion_necesaria:
+            for warning in advertencias: st.warning(warning, icon="⚠️")
+            if st.checkbox("Entiendo los riesgos y confirmo que deseo continuar con el procesamiento.", key="confirm_process"):
+                confirmado = True
+        else:
+            st.success("¡Validación exitosa! No se encontraron problemas.")
+            confirmado = True
+
+        if confirmado:
+            with st.spinner("Iniciando procesamiento..."):
+
+                df_a_procesar = cargar_y_procesar_archivos(
+                    [uploaded_file] if uploaded_file else [], 
+                    proyecto_id, 
+                    desde_ruta=(uploaded_file is None)
+                )
+
+                if modo_carga == "Anexar a datos existentes" and os.path.exists(path_datos_procesados):
+                    st.info("Modo 'Anexar' seleccionado. Combinando con datos existentes...")
+                    df_existente = pd.read_parquet(path_datos_procesados)
+                    df_a_procesar = pd.concat([df_existente, df_a_procesar], ignore_index=True)
+
+                if not df_a_procesar.empty:
+                    df_final = limpiar_dataframe(df_a_procesar, mapeo_actual)
+                    path_salida = os.path.join("proyectos", proyecto_id, "datos_procesados.parquet")
+                    df_final.to_parquet(path_salida)
+                    st.cache_data.clear()
+                    st.success(f"¡Proceso completado! Se guardaron {len(df_final)} registros.")
+                    st.info("Serás redirigido a la página de Reportes en 2 segundos...")
+                    time.sleep(2)
+                    st.switch_page("pages/2_Reportes.py")
+                else:
+                    st.error("No se pudieron cargar los datos para el procesamiento.")

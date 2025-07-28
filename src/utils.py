@@ -1,89 +1,96 @@
-# utils.py
+# src/utils.py
 
 import streamlit as st
-import io
+import os
 import pandas as pd
+import io
+import json
 import re
 import unicodedata
-import json
-import base64
+import locale
 
-def to_excel(df):
-    """Convierte un DataFrame a un archivo Excel en memoria para su descarga."""
+def configurar_pagina(titulo_pagina: str, layout: str = "wide"):
+    st.set_page_config(layout=layout, page_title=titulo_pagina)
+    estilos_fuentes = """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&display=swap');
+        [data-testid="stAppViewContainer"] {
+            font-family: 'Figtree', sans-serif;
+        }
+        </style>
+    """
+    st.markdown(estilos_fuentes, unsafe_allow_html=True)
+    path_css = os.path.join(".streamlit", "assets", "style.css")
+    if os.path.exists(path_css):
+        with open(path_css) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    else:
+        st.warning(f"Advertencia: No se encontró el archivo de estilos en la ruta: {path_css}")
+
+def manejar_columnas_duplicadas(df: pd.DataFrame) -> pd.DataFrame:
+    cols = pd.Series(df.columns)
+    for dup in cols[cols.duplicated()].unique():
+        nuevos_nombres = [dup + f'_{i}' if i != 0 else dup for i in range(sum(cols == dup))]
+        cols[cols[cols == dup].index] = nuevos_nombres
+    df.columns = cols
+    return df
+
+@st.cache_data
+def cargar_mapeo_paises():
+    """
+    Carga los datos de mapeo de países, continentes y coordenadas.
+    CORREGIDO: Ahora devuelve TRES diccionarios, incluyendo las coordenadas.
+    """
+    path_paises = os.path.join("datos", "paises_continentes.json")
+    pais_continente = {}
+    reemplazo_paises = {}
+    pais_coordenadas = {} # Diccionario para latitud y longitud
+
+    if os.path.exists(path_paises):
+        with open(path_paises, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        if isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict) and "nombre" in item:
+                    nombre_canonico = item["nombre"].upper()
+                    
+                    # Mapeo para continentes
+                    if "continente" in item:
+                        pais_continente[nombre_canonico] = item["continente"]
+                    
+                    # Mapeo para alias y reemplazos
+                    reemplazo_paises[nombre_canonico] = nombre_canonico
+                    for alias in item.get("alias", []):
+                        reemplazo_paises[alias.upper()] = nombre_canonico
+                    
+                    # Mapeo para coordenadas
+                    if "latitud" in item and "longitud" in item:
+                        pais_coordenadas[nombre_canonico] = {
+                            "lat": item["latitud"],
+                            "lon": item["longitud"]
+                        }
+                        
+    return pais_continente, reemplazo_paises, pais_coordenadas
+
+
+def to_excel(df: pd.DataFrame) -> bytes:
     output = io.BytesIO()
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Datos')
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Reporte')
     return output.getvalue()
 
-def limpiar_codigo_arancel(codigo):
-    """Limpia y estandariza códigos arancelarios."""
-    if pd.isna(codigo): return ""
-    s_codigo = str(int(float(codigo))) if isinstance(codigo, float) else str(codigo)
-    return re.sub(r'\D', '', s_codigo)
-
-def normalizar_texto(texto):
-    """Elimina tildes y convierte a minúsculas."""
-    if not isinstance(texto, str): return ""
-    return ''.join(c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn').lower()
-
-def validar_y_limpiar_nombre(texto):
-    """Estandariza nombres para filtros (quita tildes, caracteres especiales y espacios)."""
-    if not isinstance(texto, str): return ""
-    texto_normalizado = normalizar_texto(texto)
-    texto_con_espacios = re.sub(r'[^a-z0-9]+', ' ', texto_normalizado)
-    return "".join(texto_con_espacios.split())
+try:
+    locale.setlocale(locale.LC_ALL, 'es_CL.UTF-8')
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+    except locale.Error:
+        locale.setlocale(locale.LC_ALL, '')
 
 def formatar_moneda_cl(valor):
-    """Formatea un número como moneda con '.' para miles y ',' para decimales."""
-    if pd.isna(valor): return "$ 0,00"
-    formato_intermedio = f"${valor:,.2f}"
-    return formato_intermedio.replace(',', 'X').replace('.', ',').replace('X', '.')
-
-def cargar_mapeo_paises():
-    """Carga el archivo paises_continentes.json y crea los diccionarios de mapeo."""
+    if pd.isna(valor): return "$ 0"
     try:
-        with open("datos/paises_continentes.json", 'r', encoding='utf-8') as f:
-            data_paises = json.load(f)
-        mapa_pais_continente = {pais['nombre']: pais['continente'] for pais in data_paises}
-        mapa_reemplazo_paises = {alias: pais['nombre'] for pais in data_paises for alias in pais.get('alias', [])}
-        return mapa_pais_continente, mapa_reemplazo_paises
-    except FileNotFoundError:
-        return {}, {}
-
-def highlight_headers(styler, selections):
-    """Aplica estilo a las cabeceras de las columnas seleccionadas en el asistente."""
-    styler.set_table_styles([{'selector': 'th', 'props': [('background-color', '#F0F2F6'), ('color', 'black')]}], overwrite=False)
-    colors = {'principal': '#4F8BF9', 'secundario': '#17A589', 'valor': '#F39C12', 'pais': '#9B59B6', 'fecha': '#E74C3C'}
-    for role, col_name in selections.items():
-        if col_name and col_name in styler.columns:
-            color = colors.get(role, '#34495E')
-            col_idx = styler.columns.get_loc(col_name)
-            styler.set_table_styles([{'selector': f'th.col_heading.level0.col{col_idx}', 'props': [('background-color', color), ('color', 'white')]}], overwrite=False)
-    return styler
-def manejar_columnas_duplicadas(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Revisa si hay columnas duplicadas en el DataFrame y las renombra
-    agregando un sufijo _1, _2, etc. para garantizar nombres únicos.
-    """
-    cols = pd.Series(df.columns)
-    for dup in cols[cols.duplicated()].unique():
-        # Crea una lista de nuevos nombres para las columnas duplicadas
-        nuevos_nombres = [dup + f'_{i}' if i != 0 else dup for i in range(sum(cols == dup))]
-        # Aplica los nuevos nombres a las columnas correspondientes
-        cols[cols[cols == dup].index] = nuevos_nombres
-    df.columns = cols
-    return df
-
-def manejar_columnas_duplicadas(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Revisa si hay columnas duplicadas en el DataFrame y las renombra
-    agregando un sufijo _1, _2, etc. para garantizar nombres únicos.
-    """
-    cols = pd.Series(df.columns)
-    for dup in cols[cols.duplicated()].unique():
-        # Crea una lista de nuevos nombres para las columnas duplicadas
-        nuevos_nombres = [dup + f'_{i}' if i != 0 else dup for i in range(sum(cols == dup))]
-        # Aplica los nuevos nombres a las columnas correspondientes
-        cols[cols[cols == dup].index] = nuevos_nombres
-    df.columns = cols
-    return df
+        return locale.currency(valor, grouping=True, symbol=True)
+    except (ValueError, TypeError):
+        return "$ 0"

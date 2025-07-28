@@ -2,187 +2,231 @@
 
 import streamlit as st
 import pandas as pd
+import altair as alt
 import plotly.express as px
-import plotly.graph_objects as go
+import numpy as np
 from st_aggrid import AgGrid, GridOptionsBuilder, JsCode, GridUpdateMode
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 
-# Importar funciones de utilidad del proyecto
-from .utils import formatar_moneda_cl
-
-# --- FUNCIONES DE GRÁFICOS PARA EL DASHBOARD ---
-
-def generar_tabla_resumen(df):
-    """Genera la tabla de resumen estática para el dashboard principal."""
-    with st.expander("Ver Tabla Resumen por Filtro Principal", expanded=True):
-        resumen = df.groupby('filtro_principal').agg(
-            conteo_registros=('filtro_principal', 'size'),
-            valor_total_cif=('valor_cif', 'sum')
-        ).sort_values(by='valor_total_cif', ascending=False).reset_index()
-        
-        resumen['filtro_principal'] = resumen['filtro_principal'].str.title()
-        resumen['valor_total_cif'] = resumen['valor_total_cif'].apply(formatar_moneda_cl)
-        
-        resumen = resumen.rename(columns={
-            "filtro_principal": "Filtro Principal", "conteo_registros": "Nº Registros", "valor_total_cif": "Valor Total CIF"
-        })
-        st.dataframe(resumen, hide_index=True, use_container_width=True)
-
-def generar_grafico_barras_mensual(df):
-    """Genera el gráfico de barras del valor CIF mensual."""
-    st.subheader("Valor CIF Mensual por Filtro Principal")
-    df_barras = df.groupby([pd.Grouper(key='fecha', freq='ME'), 'filtro_principal'])['valor_cif'].sum().reset_index()
-    df_barras['filtro_principal'] = df_barras['filtro_principal'].str.title()
-    fig = px.bar(df_barras, x='fecha', y='valor_cif', color='filtro_principal', title='Desglose de Valor CIF Mensual')
-    fig.update_xaxes(tickformat="%d-%m-%Y")
-    st.plotly_chart(fig, use_container_width=True)
-
-def generar_ranking_marcas(df):
-    """Genera el gráfico de barras del ranking de filtros principales."""
-    st.subheader("Ranking por Filtro Principal")
-    ranking = df.groupby('filtro_principal')['valor_cif'].sum().sort_values(ascending=False).nlargest(15)
-    ranking.index = ranking.index.str.title()
-    fig = px.bar(ranking, x=ranking.values, y=ranking.index, orientation='h', labels={'x': 'Total Valor CIF (USD)', 'y': 'Filtro Principal'}, title='Top 15 Filtros Principales')
-    fig.update_layout(yaxis={'categoryorder':'total ascending'})
-    st.plotly_chart(fig, use_container_width=True)
-
-def generar_pie_paises(df):
-    """Genera el gráfico de torta de participación por país."""
-    st.subheader("Participación de Mercado por País")
-    cif_pais = df.groupby('pais_final')['valor_cif'].sum()
-    cif_pais.index = cif_pais.index.str.title()
-    fig = px.pie(cif_pais, names=cif_pais.index, values=cif_pais.values, title='Participación por País')
-    st.plotly_chart(fig, use_container_width=True)
-
-def generar_detalle_repuestos(df):
-    """Genera la tabla de detalle por segmento de producto."""
-    if 'segmento_producto' in df.columns:
-        with st.expander("⚙️ Análisis por Segmento de Producto"):
-            segmentos = sorted(df['segmento_producto'].unique())
-            segmento_seleccionado = st.selectbox("Selecciona un segmento para ver detalle:", options=segmentos, key="selector_segmento")
-            if segmento_seleccionado:
-                st.write(f"Mostrando registros para el segmento **{segmento_seleccionado}**")
-                df_detalle = df[df['segmento_producto'] == segmento_seleccionado]
-                st.dataframe(df_detalle, hide_index=True, use_container_width=True)
-
-def generar_grafico_arancel(df):
-    """Genera el gráfico de barras de valor CIF por capítulo arancelario."""
-    if 'descripcion_arancel' in df.columns:
-        st.subheader("Valor CIF por Clasificación Arancelaria")
-        df_filtrado_arancel = df[~df['descripcion_arancel'].isin(['N/A', 'Código no encontrado'])]
-        if not df_filtrado_arancel.empty:
-            cif_por_arancel = df_filtrado_arancel.groupby('descripcion_arancel')['valor_cif'].sum().sort_values(ascending=False).nlargest(15)
-            if not cif_por_arancel.empty:
-                cif_por_arancel.index = cif_por_arancel.index.str.title()
-                fig = px.bar(cif_por_arancel, x=cif_por_arancel.values, y=cif_por_arancel.index, orientation='h', title='Top 15 Capítulos Arancelarios', labels={'x': 'Total Valor CIF (USD)', 'y': 'Capítulo Arancelario'})
-                fig.update_layout(yaxis={'categoryorder':'total ascending'})
-                st.plotly_chart(fig, use_container_width=True)
-
-def generar_grafico_pareto_principal(df):
-    """Crea un gráfico de Pareto estándar basado en el Filtro Principal."""
-    st.subheader("Análisis de Pareto por Filtro Principal")
-    pareto_data = df.groupby('filtro_principal')['valor_cif'].sum().sort_values(ascending=False).reset_index()
-    pareto_data.rename(columns={"filtro_principal": "Filtro Principal"}, inplace=True)
-    pareto_data['porcentaje'] = (pareto_data['valor_cif'] / pareto_data['valor_cif'].sum()) * 100
-    pareto_data['porcentaje_acumulado'] = pareto_data['porcentaje'].cumsum()
-    fig = go.Figure()
-    fig.add_trace(go.Bar(x=pareto_data['Filtro Principal'], y=pareto_data['valor_cif'], name='Valor CIF', marker_color='#1f77b4'))
-    fig.add_trace(go.Scatter(x=pareto_data['Filtro Principal'], y=pareto_data['porcentaje_acumulado'], name='Porcentaje Acumulado', yaxis='y2', mode='lines+markers', line=dict(color='#ff7f0e')))
-    fig.update_layout(
-        title='Principio de Pareto: Contribución por Filtro Principal',
-        xaxis=dict(title='Filtro Principal'),
-        yaxis=dict(title=dict(text='Valor CIF Total (USD)', font=dict(color='#1f77b4'))),
-        yaxis2=dict(title=dict(text='Porcentaje Acumulado (%)', font=dict(color='#ff7f0e')), overlaying='y', side='right', range=[0, 105]),
-        legend=dict(x=0, y=1.2, orientation="h")
+def _configurar_grafico_altair(chart, titulo: str, paleta_colores: list):
+    """Aplica configuraciones comunes a los gráficos de Altair."""
+    return chart.properties(
+        title=alt.Title(
+            text=titulo,
+            anchor='start',
+            fontSize=18,
+            fontWeight=600,
+            dy=-10
+        ),
+        height=350
+    ).configure_axis(
+        labelFontSize=11,
+        titleFontSize=13
+    ).configure_legend(
+        titleFontSize=12,
+        labelFontSize=11,
+        orient='bottom'
+    ).configure_range(
+        category=paleta_colores
+    ).configure_view(
+        strokeWidth=0
     )
-    st.plotly_chart(fig, use_container_width=True)
 
-def generar_grafico_pareto_clusters(df_clustered):
-    """Analiza los clusters generados y crea un gráfico de Pareto."""
-    st.subheader("Análisis de Pareto por Cluster")
-    pareto_data = df_clustered.groupby('cluster')['valor_cif'].sum().sort_values(ascending=False).reset_index()
-    pareto_data['porcentaje'] = (pareto_data['valor_cif'] / pareto_data['valor_cif'].sum()) * 100
-    pareto_data['porcentaje_acumulado'] = pareto_data['porcentaje'].cumsum()
-    pareto_data['cluster'] = pareto_data['cluster'].astype(str)
-    fig = go.Figure()
-    fig.add_trace(go.Bar(x=pareto_data['cluster'], y=pareto_data['valor_cif'], name='Valor CIF por Cluster', marker_color='#1f77b4'))
-    fig.add_trace(go.Scatter(x=pareto_data['cluster'], y=pareto_data['porcentaje_acumulado'], name='Porcentaje Acumulado', yaxis='y2', mode='lines+markers', line=dict(color='#ff7f0e')))
-    fig.update_layout(
-        title='Principio de Pareto: Contribución de cada Cluster al Valor Total',
-        xaxis=dict(title='Cluster'),
-        yaxis=dict(title=dict(text='Valor CIF Total (USD)', font=dict(color='#1f77b4'))),
-        yaxis2=dict(title=dict(text='Porcentaje Acumulado (%)', font=dict(color='#ff7f0e')), overlaying='y', side='right', range=[0, 105]),
-        legend=dict(x=0, y=1.1, orientation="h")
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-def generar_grafico_clusters(df):
-    """Realiza un análisis de clustering y luego genera el gráfico de Pareto."""
-    st.info("El análisis de clusters agrupa tus datos para descubrir patrones ocultos.")
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        num_clusters = st.slider("Selecciona el número de clusters a encontrar:", 2, 10, 4, key="slider_clusters")
-    with col2:
-        if st.button("🧠", key="btn_generar_clusters", help="Generar Análisis de Clusters", use_container_width=True):
-            st.session_state.run_cluster_analysis = True
-
-    if st.session_state.get('run_cluster_analysis'):
-        caracteristicas_posibles = ['valor_cif', 'filtro_principal', 'pais_final', 'segmento_producto', 'continente']
-        features = [col for col in caracteristicas_posibles if col in df.columns]
-        df_cluster = df[features].copy().dropna()
-        if len(df_cluster) < 20:
-            st.warning("No hay suficientes datos para generar un análisis de clusters.")
-            return
-        with st.spinner("Realizando análisis de clustering..."):
-            features_categoricas = [col for col in features if pd.api.types.is_object_dtype(df_cluster[col])]
-            df_encoded = pd.get_dummies(df_cluster, columns=features_categoricas)
-            scaler = StandardScaler()
-            df_scaled = scaler.fit_transform(df_encoded)
-            kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init='auto')
-            df_cluster['cluster'] = kmeans.fit_predict(df_scaled)
-            pca = PCA(n_components=2)
-            components = pca.fit_transform(df_scaled)
-            df_cluster['pca1'] = components[:, 0]
-            df_cluster['pca2'] = components[:, 1]
-            hover_data = [col for col in ['filtro_principal', 'pais_final', 'valor_cif'] if col in df_cluster.columns]
-            fig_scatter = px.scatter(df_cluster, x='pca1', y='pca2', color='cluster', color_continuous_scale=px.colors.qualitative.Vivid, hover_data=hover_data, title=f'Visualización de {num_clusters} Clusters')
-            st.plotly_chart(fig_scatter, use_container_width=True)
-            generar_grafico_pareto_clusters(df_cluster)
-
-def generar_tabla_resumen_interactiva(df):
-    """Prepara y renderiza la tabla de resumen interactiva."""
-    st.subheader("Tabla Resumen del Estado Actual de los Datos")
-    st.info("Haz doble clic en cualquier celda para copiar su valor.")
-    if df.empty:
-        st.warning("No hay datos procesados para mostrar.")
-        return None
-    resumen = df.groupby('filtro_principal').agg(
-        conteo_registros=('filtro_principal', 'size'),
-        valor_total_cif=('valor_cif', 'sum')
-    ).sort_values(by='valor_total_cif', ascending=False).reset_index()
-    resumen.rename(columns={"filtro_principal": "Filtro Principal (Estado Actual)"}, inplace=True)
+def generar_tabla_resumen(df, metricas_seleccionadas):
+    """Muestra el total de registros y un resumen de las métricas clave."""
+    st.subheader("Resumen General de Datos")
     
-    gb = GridOptionsBuilder.from_dataframe(resumen)
-    js_copy_cell = JsCode("""
-        function(e) {
-            if(e.value != null) {
-                navigator.clipboard.writeText(e.value);
-                e.api.flashCells({rowNodes: [e.node], columns: [e.column.colId], flashDelay: 1000});
-                e.api.setGridOption('cellCopied', { 'value': e.value });
-            }
-        }
-    """)
-    gb.configure_grid_options(onCellDoubleClicked=js_copy_cell)
-    gb.configure_column("valor_total_cif", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], precision=0)
+    metricas_validas = [m for m in metricas_seleccionadas if m in df.columns]
+    if not metricas_validas:
+        st.warning("No se encontraron métricas válidas para mostrar en el resumen.")
+        return
+        
+    num_columnas = len(metricas_validas) + 1
+    cols = st.columns(num_columnas)
 
-    return AgGrid(
-        resumen,
-        gridOptions=gb.build(),
-        height=400,
-        width='100%',
-        theme='streamlit',
-        allow_unsafe_jscode=True,
-        update_mode=GridUpdateMode.GRID_CHANGED
+    cols[0].metric("Total Registros", f"{len(df):,}")
+
+    for i, metrica in enumerate(metricas_validas):
+        valor_total = df[metrica].sum()
+        is_currency = any(sub in metrica.lower() for sub in ['usd', 'valor', 'precio', 'cif'])
+        format_string = "${:,.0f}" if is_currency else "{:,.0f}"
+        cols[i+1].metric(f"Total {metrica}", format_string.format(valor_total))
+
+def generar_grafico_pareto(df, filtro, metrica, paleta):
+    """Genera un gráfico de Pareto dinámico con el color del 80% actualizado."""
+    if filtro not in df.columns or metrica not in df.columns:
+        st.warning(f"No se pudo generar el gráfico de Pareto. Verifica que las columnas '{filtro}' y '{metrica}' existan.")
+        return
+    
+    pareto_data = df.groupby(filtro)[metrica].sum().reset_index().nlargest(15, metrica)
+    pareto_data = pareto_data.sort_values(by=metrica, ascending=False)
+    
+    total_metrica = df[metrica].sum()
+    if total_metrica == 0: return
+
+    pareto_data['Acumulado'] = pareto_data[metrica].cumsum()
+    pareto_data['Porcentaje Acumulado'] = 100 * pareto_data['Acumulado'] / total_metrica
+    pareto_data['Grupo'] = np.where(pareto_data['Porcentaje Acumulado'] <= 80, 'Representa el 80%', 'Resto')
+
+    color_principal = '#DD2F1C'
+    color_secundario = paleta[2] if len(paleta) > 2 else '#f58518'
+    color_linea = paleta[3] if len(paleta) > 3 else '#e45756'
+
+    base = alt.Chart(pareto_data).encode(x=alt.X(f'{filtro}:N', sort='-y', title=filtro))
+    
+    barras = base.mark_bar().encode(
+        y=alt.Y(f'{metrica}:Q', title=metrica),
+        tooltip=[alt.Tooltip(f'{filtro}:N', title=filtro), alt.Tooltip(f'{metrica}:Q', title=metrica, format='$,.0f'), alt.Tooltip('Porcentaje Acumulado:Q', title='% Acumulado', format='.1f')],
+        color=alt.Color('Grupo:N',
+            scale=alt.Scale(domain=['Representa el 80%', 'Resto'], range=[color_principal, color_secundario]),
+            legend=alt.Legend(title="Grupo Pareto")
+        )
     )
+    
+    linea = base.mark_line(color=color_linea, point=True).encode(
+        y=alt.Y('Porcentaje Acumulado:Q', title='Porcentaje Acumulado (%)', axis=alt.Axis(format='.0f')),
+        tooltip=[alt.Tooltip('Porcentaje Acumulado:Q', title='% Acumulado', format='.2f')]
+    )
+    
+    chart = alt.layer(barras, linea).resolve_scale(y='independent')
+    st.altair_chart(_configurar_grafico_altair(chart, f"Análisis de Pareto por {filtro}", paleta), use_container_width=True)
+
+def generar_grafico_temporal(df, fecha_col, metrica_col, frecuencia, paleta):
+    """Genera un gráfico de evolución temporal dinámico."""
+    freq_map = {'Mensual': 'ME', 'Trimestral': 'QE', 'Anual': 'YE'}
+    df_temporal = df.set_index(fecha_col).resample(freq_map[frecuencia])[metrica_col].sum().reset_index()
+    base = alt.Chart(df_temporal).encode(x=alt.X(f'{fecha_col}:T', title=fecha_col, axis=alt.Axis(format="%b %Y")))
+    linea = base.mark_line(point=True).encode(
+        y=alt.Y(f'{metrica_col}:Q', title=metrica_col, axis=alt.Axis(format='$,.0f')),
+        tooltip=[alt.Tooltip(f'{fecha_col}:T', title='Periodo', format='%Y-%m'), alt.Tooltip(f'{metrica_col}:Q', title=metrica_col, format='$,.0f')]
+    )
+    st.altair_chart(_configurar_grafico_altair(linea, f"Evolución de {metrica_col} ({frecuencia})", paleta), use_container_width=True)
+
+def generar_grafico_ranking(df, eje_x, eje_y, paleta):
+    """Genera un gráfico de ranking dinámico, limitado al Top 15."""
+    ranking_data = df.groupby(eje_x)[eje_y].sum().reset_index().nlargest(15, eje_y)
+    chart = alt.Chart(ranking_data).mark_bar().encode(
+        x=alt.X(f'{eje_y}:Q', title=eje_y),
+        y=alt.Y(f'{eje_x}:N', title=eje_x, sort='-x'),
+        tooltip=[alt.Tooltip(f'{eje_x}:N', title=eje_x), alt.Tooltip(f'{eje_y}:Q', title=eje_y, format='{",.0f"}')]
+    )
+    st.altair_chart(_configurar_grafico_altair(chart, f"Top 15 {eje_x} por {eje_y}", paleta), use_container_width=True)
+
+def generar_grafico_sunburst(df, path, values, title, paleta):
+    """Genera un gráfico Sunburst (Nested Pie) dinámico usando Plotly."""
+    st.subheader(title)
+    fig = px.sunburst(df, path=path, values=values, color=values, color_continuous_scale=px.colors.sequential.deep)
+    fig.update_layout(margin=dict(t=30, l=10, r=10, b=10), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    st.plotly_chart(fig, use_container_width=True)
+
+def generar_grafico_treemap(df, path, values, title):
+    """Genera un gráfico Treemap dinámico usando Plotly."""
+    if not all(col in df.columns for col in path) or values not in df.columns:
+        st.warning("Verifica que las dimensiones y la métrica seleccionadas para el Treemap existan en los datos.")
+        return
+    st.subheader(title)
+    fig = px.treemap(df, path=path, values=values, color=values, 
+                   color_continuous_scale=px.colors.sequential.Blues_r)
+    fig.update_layout(margin=dict(t=50, l=10, r=10, b=10), title_text=title)
+    st.plotly_chart(fig, use_container_width=True)
+
+def generar_mapa_distribucion(df, lat_col, lon_col, size_col=None):
+    """
+    Genera un mapa de puntos. El tamaño se escala a un radio en metros
+    para una correcta visualización en st.map.
+    """
+    st.subheader("Mapa de Distribución Geográfica")
+
+    if lat_col not in df.columns or lon_col not in df.columns:
+        st.info("No se han configurado columnas de latitud y longitud.")
+        return
+
+    cols_to_use = [lat_col, lon_col]
+    if size_col and size_col in df.columns:
+        cols_to_use.append(size_col)
+
+    df_mapa = df[cols_to_use].copy().dropna()
+
+    if not df_mapa.empty:
+        df_mapa.rename(columns={lat_col: 'lat', lon_col: 'lon'}, inplace=True)
+
+        size_param = None
+        if size_col and size_col in df_mapa.columns:
+            df_mapa[size_col] = pd.to_numeric(df_mapa[size_col], errors='coerce')
+            df_mapa.dropna(subset=[size_col], inplace=True)
+
+            min_val = df_mapa[size_col].min()
+            max_val = df_mapa[size_col].max()
+
+            if max_val > min_val:
+                # --- LÓGICA DE ESCALADO A METROS ---
+                # Se escala a un rango de radios visibles (ej: 50km a 500km)
+                min_radius_meters = 50000
+                max_radius_meters = 500000
+
+                df_mapa['size_scaled'] = min_radius_meters + \
+                    ((df_mapa[size_col] - min_val) / (max_val - min_val)) * (max_radius_meters - min_radius_meters)
+
+                size_param = 'size_scaled'
+
+        st.map(df_mapa, latitude='lat', longitude='lon', size=size_param)
+    else:
+        st.warning("⚠️ No hay datos geográficos para mostrar con los filtros actuales.")
+
+def generar_grafico_clusters(df_clusters, paleta):
+    """Visualiza los resultados del clustering de forma interactiva."""
+    if 'PC1' in df_clusters.columns and 'PC2' in df_clusters.columns:
+        chart = alt.Chart(df_clusters).mark_circle(size=80, opacity=0.7).encode(
+            x=alt.X('PC1:Q', title='Componente Principal 1', scale=alt.Scale(zero=False)),
+            y=alt.Y('PC2:Q', title='Componente Principal 2', scale=alt.Scale(zero=False)),
+            color=alt.Color('Cluster:N', title='Cluster'),
+            tooltip=[col for col in df_clusters.columns if col not in ['PC1', 'PC2']]
+        ).interactive()
+        st.altair_chart(_configurar_grafico_altair(chart, "Visualización de Clusters (PCA)", paleta), use_container_width=True)
+
+def generar_regresion_lineal(df, x_var, y_var, paleta):
+    """Genera un gráfico de dispersión con una línea de regresión."""
+    st.subheader(f"Regresión Lineal: {y_var} vs. {x_var}")
+    chart = alt.Chart(df).mark_circle(size=60, opacity=0.5).encode(
+        x=alt.X(f'{x_var}:Q', scale=alt.Scale(zero=False)),
+        y=alt.Y(f'{y_var}:Q', scale=alt.Scale(zero=False)),
+        tooltip=[x_var, y_var]
+    ).interactive()
+    linea_regresion = chart.transform_regression(x_var, y_var).mark_line(color=paleta[1] if len(paleta) > 1 else 'orange')
+    st.altair_chart(chart + linea_regresion, use_container_width=True)
+
+def generar_proyeccion_temporal(df, fecha_col, metrica_col, periodos, paleta):
+    """Genera una proyección lineal simple para una serie temporal."""
+    st.subheader(f"Proyección Lineal de {metrica_col}")
+    df_temporal = df.set_index(fecha_col).resample('ME')[metrica_col].sum().reset_index()
+    df_temporal['time'] = (df_temporal[fecha_col] - df_temporal[fecha_col].min()).dt.days
+
+    coef = np.polyfit(df_temporal['time'], df_temporal[metrica_col], 1)
+    poly1d_fn = np.poly1d(coef)
+
+    ultima_fecha = df_temporal[fecha_col].max()
+    fechas_futuras = pd.to_datetime([ultima_fecha + pd.DateOffset(months=i) for i in range(1, periodos + 2)])
+    df_futuro = pd.DataFrame({fecha_col: fechas_futuras})
+    df_futuro['time'] = (df_futuro[fecha_col] - df_temporal[fecha_col].min()).dt.days
+    df_futuro['proyeccion'] = poly1d_fn(df_futuro['time'])
+    
+    chart_hist = alt.Chart(df_temporal).mark_line().encode(x=f'{fecha_col}:T', y=f'{metrica_col}:Q')
+    chart_proy = alt.Chart(df_futuro).mark_line(strokeDash=[5,5], color=paleta[1] if len(paleta) > 1 else 'orange').encode(x=f'{fecha_col}:T', y='proyeccion:Q')
+    st.altair_chart((chart_hist + chart_proy).properties(title=f"Proyección a {periodos} meses").interactive(), use_container_width=True)
+
+def generar_heatmap_correlacion(df, metricas):
+    """Genera un heatmap de correlación entre las métricas."""
+    st.subheader("Heatmap de Correláción de Métricas")
+    corr_matrix = df[metricas].corr()
+    fig = px.imshow(corr_matrix, text_auto=True, aspect="auto", color_continuous_scale='RdBu_r', zmin=-1, zmax=1)
+    fig.update_layout(title="Correlación entre Variables Numéricas")
+    st.plotly_chart(fig, use_container_width=True)
+
+def generar_tabla_interactiva(df):
+    """Muestra un DataFrame usando AgGrid con copiado de celda."""
+    gb = GridOptionsBuilder.from_dataframe(df)
+    js_copy_cell = JsCode("function(e) { if(e.value != null) { navigator.clipboard.writeText(e.value); } }")
+    gb.configure_grid_options(onCellDoubleClicked=js_copy_cell)
+    gb.configure_default_column(editable=False, groupable=True)
+    gb.configure_side_bar()
+    grid_options = gb.build()
+    AgGrid(df, gridOptions=grid_options, height=400, width='100%', update_mode=GridUpdateMode.MODEL_CHANGED, allow_unsafe_jscode=True, theme="alpine")

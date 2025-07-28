@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Paletas de Colores</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+        }
+        .palette-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .palette-header {
+            padding: 1.5rem 2rem;
+            background-color: #263746;
+            color: #ffffff;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .color-row {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .color-row:last-child {
+            border-bottom: none;
+        }
+        .color-swatch {
+            min-width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Círculo */
+            margin-right: 1.5rem;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .color-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .color-hex {
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+        }
+        .color-desc {
+            font-style: italic;
+            color: #555;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="palette-container">
+        <div class="palette-header">
+            <h1>Paleta: Corporativo Confiable</h1>
+        </div>
+        
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #080f1a;"></div>
+            <div class="color-details">
+                <span class="color-hex">#080f1a</span>
+                <span class="color-desc">azul noche</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #101827;"></div>
+            <div class="color-details">
+                <span class="color-hex">#101827</span>
+                <span class="color-desc">azul muy oscuro</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #192e3f;"></div>
+            <div class="color-details">
+                <span class="color-hex">#192e3f</span>
+                <span class="color-desc">gris azulado profundo</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #263746;"></div>
+            <div class="color-details">
+                <span class="color-hex">#263746</span>
+                <span class="color-desc">gris azulado oscuro</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #526a83;"></div>
+            <div class="color-details">
+                <span class="color-hex">#526a83</span>
+                <span class="color-desc">gris intermedio</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #5e7891;"></div>
+            <div class="color-details">
+                <span class="color-hex">#5e7891</span>
+                <span class="color-desc">gris medio</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #46b1e2;"></div>
+            <div class="color-details">
+                <span class="color-hex">#46b1e2</span>
+                <span class="color-desc">celeste vibrante</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #95d5f7;"></div>
+            <div class="color-details">
+                <span class="color-hex">#95d5f7</span>
+                <span class="color-desc">celeste claro</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #a2d9f7;"></div>
+            <div class="color-details">
+                <span class="color-hex">#a2d9f7</span>
+                <span class="color-desc">celeste claro</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #d1d4d6;"></div>
+            <div class="color-details">
+                <span class="color-hex">#d1d4d6</span>
+                <span class="color-desc">gris claro</span>
+            </div>
+        </div>
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #d9dddf;"></div>
+            <div class="color-details">
+                <span class="color-hex">#d9dddf</span>
+                <span class="color-desc">gris claro</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="palette-container" style="margin-top: 2rem;">
+        <div class="palette-header" style="background-color: #c84d5f;">
+            <h1>Paleta: Tema Claro Vibrante</h1>
+        </div>
+        
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #c84d5f;"></div>
+            <div class="color-details">
+                <span class="color-hex">#c84d5f</span>
+                <span class="color-desc">Rosa</span>
+            </div>
+        </div>
+
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #2f4e6f;"></div>
+            <div class="color-details">
+                <span class="color-hex">#2f4e6f</span>
+                <span class="color-desc">Verde</span>
+            </div>
+        </div>
+
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #d8deae;"></div>
+            <div class="color-details">
+                <span class="color-hex">#d8deae</span>
+                <span class="color-desc">Beige</span>
+            </div>
+        </div>
+        
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #8ebd99;"></div>
+            <div class="color-details">
+                <span class="color-hex">#8ebd99</span>
+                <span class="color-desc">Verde menta</span>
+            </div>
+        </div>
+
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #ddc23f;"></div>
+            <div class="color-details">
+                <span class="color-hex">#ddc23f</span>
+                <span class="color-desc">Amarillo</span>
+            </div>
+        </div>
+        
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #263746;"></div>
+            <div class="color-details">
+                <span class="color-hex">#263746</span>
+                <span class="color-desc">Gris azulado oscuro</span>
+            </div>
+        </div>
+        
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #F92716;"></div>
+            <div class="color-details">
+                <span class="color-hex">#F92716</span>
+                <span class="color-desc">Rojo vibrante</span>
+            </div>
+        </div>
+
+        <div class="color-row">
+            <div class="color-swatch" style="background-color: #3D6FAA;"></div>
+            <div class="color-details">
+                <span class="color-hex">#3D6FAA</span>
+                <span class="color-desc">Azul acero</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

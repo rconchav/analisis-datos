@@ -1,31 +1,67 @@
-# file_manager.py
+# src/file_manager.py
 
-import json
+import streamlit as st
+import pandas as pd
 import os
+import json
 
-def cargar_log_procesados(proyecto_activo):
-    """Carga el registro de archivos procesados para un proyecto específico."""
-    path_log = f"proyectos/{proyecto_activo}/processed_files.json"
-    if os.path.exists(path_log) and os.path.getsize(path_log) > 0:
-        try:
-            with open(path_log, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return {}
-    return {}
+def cargar_y_procesar_archivos(uploaded_files, proyecto_id, desde_ruta=False):
+    """
+    Carga y combina archivos Excel.
+    
+    Args:
+        uploaded_files (list): Lista de archivos subidos por st.file_uploader.
+        proyecto_id (str): El ID del proyecto activo.
+        desde_ruta (bool): Si es True, lee los archivos desde la carpeta del proyecto
+                             en lugar de los archivos subidos.
+    """
+    lista_dfs = []
+    path_data = os.path.join("proyectos", proyecto_id, "data")
+    os.makedirs(path_data, exist_ok=True)
 
-def guardar_log_procesados(proyecto_activo, log):
-    """Guarda el registro actualizado para un proyecto específico."""
-    path_proyecto = f"proyectos/{proyecto_activo}"
-    os.makedirs(path_proyecto, exist_ok=True)
-    path_log = os.path.join(path_proyecto, "processed_files.json")
-    with open(path_log, 'w', encoding='utf-8') as f:
-        json.dump(log, f, indent=4)
+    if not desde_ruta:
+        # Modo 1: Procesar archivos recién subidos
+        if not uploaded_files or uploaded_files[0] is None:
+            st.warning("No se ha subido ningún archivo para procesar.")
+            return pd.DataFrame()
 
-def ha_sido_procesado(nombre_archivo, tamano_archivo, log_seccion):
-    """Verifica si un archivo ya ha sido procesado basado en nombre y tamaño."""
-    return nombre_archivo in log_seccion and log_seccion[nombre_archivo]['size'] == tamano_archivo
+        # Limpia archivos anteriores para no mezclar datos
+        for f in os.listdir(path_data):
+            os.remove(os.path.join(path_data, f))
+            
+        for uploaded_file in uploaded_files:
+            file_path = os.path.join(path_data, uploaded_file.name)
+            try:
+                with open(file_path, "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+                df = pd.read_excel(file_path)
+                lista_dfs.append(df)
+            except Exception as e:
+                st.error(f"Error al procesar el archivo '{uploaded_file.name}': {e}")
 
-def actualizar_log(nombre_archivo, tamano_archivo, log_seccion):
-    """Añade o actualiza la entrada de un archivo en una sección del log."""
-    log_seccion[nombre_archivo] = {'size': tamano_archivo}
+    else:
+        # Modo 2: Re-procesar archivos existentes desde la ruta
+        if not os.path.exists(path_data) or not os.listdir(path_data):
+            st.error("No se encontraron archivos de datos existentes para re-procesar.")
+            return pd.DataFrame()
+
+        for nombre_archivo in os.listdir(path_data):
+            if nombre_archivo.endswith('.xlsx'):
+                ruta_completa = os.path.join(path_data, nombre_archivo)
+                try:
+                    df = pd.read_excel(ruta_completa)
+                    lista_dfs.append(df)
+                except Exception as e:
+                    st.error(f"Error al leer el archivo existente '{nombre_archivo}': {e}")
+
+    if not lista_dfs:
+        return pd.DataFrame()
+
+    return pd.concat(lista_dfs, ignore_index=True)
+    # Concatenar todos los DataFrames
+    try:
+        df_combinado = pd.concat(lista_dfs, ignore_index=True)
+        return df_combinado
+    except Exception as e:
+        st.error(f"Error al combinar los archivos: {e}")
+        return pd.DataFrame()

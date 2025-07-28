@@ -1,22 +1,32 @@
-# requirements.txt
+# requirements.txt - Versión 4.1
 
 # Core de la aplicación y UI
 streamlit
 streamlit-aggrid
+streamlit-js-eval
 
-# Manipulación y lectura de datos
+# Manipulación y análisis de datos
 pandas
 pyarrow
 openpyxl
+numpy
+
+# Machine Learning y Clustering
+scikit-learn
 
 # Visualización
+altair
 plotly
 
 # Limpieza de texto
 fuzzywuzzy
 python-Levenshtein
 
-# Para futura extracción de tablas desde PDFs (v3.1+)
-# NOTA: Requiere dependencias a nivel de sistema como Ghostscript.
-camelot-py[cv]
-scikit-learn
+# Extracción de tablas desde PDFs
+# Se fijan las versiones para evitar conflictos conocidos.
+camelot-py[cv]==1.0.0
+pypdf<4.0
+cryptography<48.0.0
+
+# Escritura de archivos Excel
+xlsxwriter

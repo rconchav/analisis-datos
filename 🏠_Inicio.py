@@ -2,137 +2,175 @@
 
 import streamlit as st
 import os
-import re
-import json
 import shutil
+import sys
+import json
+import time
 
-PROYECTOS_DIR = "proyectos"
+# --- CÓDIGO DE CONFIGURACIÓN DE RUTA ---
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-st.set_page_config(layout="wide", page_title="Portal de Proyectos")
+# --- Importaciones de Módulos Propios ---
+from src.utils import configurar_pagina
+from src.project_manager import ProjectManager
+from src.theme import configurar_tema
 
-# --- Funciones de Gestión ---
-def cargar_proyectos():
-    if not os.path.exists(PROYECTOS_DIR): os.makedirs(PROYECTOS_DIR)
-    lista_proyectos = []
-    for nombre_carpeta in sorted(os.listdir(PROYECTOS_DIR)):
-        path_proyecto = os.path.join(PROYECTOS_DIR, nombre_carpeta)
-        if os.path.isdir(path_proyecto):
-            path_meta = os.path.join(path_proyecto, "metadata.json")
-            if os.path.exists(path_meta):
-                with open(path_meta, 'r', encoding='utf-8') as f:
-                    meta = json.load(f)
-                    lista_proyectos.append({
-                        "id": nombre_carpeta,
-                        "display_name": meta.get("display_name", nombre_carpeta.replace('_', ' ').title()),
-                        "description": meta.get("description", "Sin descripción.")
-                    })
-    return lista_proyectos
+# --- CONFIGURACIÓN INICIAL DE LA PÁGINA ---
+configurar_pagina(titulo_pagina="Portal de Proyectos")
 
-def sanitizar_nombre_proyecto(nombre):
-    nombre = nombre.strip().lower().replace(" ", "_")
-    nombre = re.sub(r'(?u)[^-\w.]', '', nombre)
-    return nombre
+# --- INICIALIZAR EL GESTOR DE PROYECTOS ---
+project_manager = ProjectManager()
 
-# --- Estado de la Sesión ---
-if 'proyecto_activo' not in st.session_state: st.session_state.proyecto_activo = None
-if 'confirmar_eliminacion' not in st.session_state: st.session_state.confirmar_eliminacion = None
+# --- ESTADO DE LA SESIÓN Y TEMA ---
+if 'theme_toggle' not in st.session_state:
+    st.session_state.theme_toggle = True
 
-# --- Interfaz de Usuario ---
-st.title("📈 Plataforma de Análisis de Datos v3.0")
+if 'session_initialized' not in st.session_state:
+    st.session_state.proyecto_activo = None
+    st.session_state.proyecto_activo_nombre = None
+    st.session_state.confirmar_eliminacion = None
+    st.session_state.session_initialized = True
 
-# --- NUEVA LÓGICA DE BARRA DE ESTADO / CREACIÓN ---
-if st.session_state.proyecto_activo:
-    # Si hay un proyecto activo, muestra el estado y el botón '+'
-    col1, col2 = st.columns([4, 1])
-    with col1:
-        display_name = st.session_state.proyecto_activo.get("display_name", st.session_state.proyecto_activo.get("id"))
-        st.success(f"**Proyecto Activo:** `{display_name}`", icon="✅")
-    with col2:
-        with st.popover("➕ Crear Otro Proyecto", use_container_width=True):
-            # Formulario idéntico al de abajo
-            with st.form("form_nuevo_proyecto_popover"):
-                nombre_ingresado = st.text_input("Nombre del Nuevo Proyecto")
-                descripcion_ingresada = st.text_area("Breve Descripción")
-                submitted = st.form_submit_button("Crear")
-                if submitted and nombre_ingresado:
-                    # (Lógica de creación de proyecto)
-                    nombre_sanitizado = sanitizar_nombre_proyecto(nombre_ingresado)
-                    path_proyecto = os.path.join(PROYECTOS_DIR, nombre_sanitizado)
-                    if os.path.exists(path_proyecto): st.error("Ya existe un proyecto con ese nombre.")
-                    else:
-                        os.makedirs(path_proyecto)
-                        metadata = {"display_name": nombre_ingresado, "description": descripcion_ingresada}
-                        with open(os.path.join(path_proyecto, 'metadata.json'), 'w', encoding='utf-8') as f: json.dump(metadata, f, indent=4)
-                        # (Crear otros archivos vacíos)
-                        st.session_state.proyecto_activo = {"id": nombre_sanitizado, "display_name": nombre_ingresado}
-                        st.switch_page("pages/1_Configuracion.py")
+tema_actual = "Oscuro" if st.session_state.theme_toggle else "Claro"
+configurar_tema(tema_actual)
 
-else:
-    # Si NO hay proyecto activo, muestra el formulario de creación directamente
-    with st.container(border=True):
-        st.subheader("➕ Crear tu Primer Proyecto")
-        with st.form("form_nuevo_proyecto_main"):
-            col1, col2 = st.columns(2)
-            with col1:
-                nombre_ingresado = st.text_input("Nombre del Proyecto", placeholder="Ej: Análisis Trimestral")
-            with col2:
-                descripcion_ingresada = st.text_input("Breve Descripción", placeholder="Ej: Importaciones de maquinaria agrícola Q1.")
-            
-            submitted = st.form_submit_button("Crear y Empezar a Configurar")
-            if submitted and nombre_ingresado:
-                # (Lógica de creación de proyecto - idéntica a la del popover)
-                nombre_sanitizado = sanitizar_nombre_proyecto(nombre_ingresado)
-                path_proyecto = os.path.join(PROYECTOS_DIR, nombre_sanitizado)
-                if os.path.exists(path_proyecto): st.error("Ya existe un proyecto con ese nombre.")
-                else:
-                    os.makedirs(path_proyecto)
-                    metadata = {"display_name": nombre_ingresado, "description": descripcion_ingresada}
-                    with open(os.path.join(path_proyecto, 'metadata.json'), 'w', encoding='utf-8') as f: json.dump(metadata, f, indent=4)
-                    with open(os.path.join(path_proyecto, 'config.json'), 'w') as f: json.dump({}, f)
-                    with open(os.path.join(path_proyecto, 'diccionario.json'), 'w') as f: json.dump({}, f)
-                    with open(os.path.join(path_proyecto, 'segmentacion.json'), 'w') as f: json.dump({}, f)
-                    
-                    st.session_state.proyecto_activo = {"id": nombre_sanitizado, "display_name": nombre_ingresado}
-                    st.switch_page("pages/1_Configuracion.py")
+# --- FUNCIÓN CALLBACK ---
+def actualizar_proyecto_activo():
+    seleccion = st.session_state.selector_proyecto
+    if seleccion == "--- Crear Nuevo Proyecto ---":
+        st.session_state.proyecto_activo = None
+        st.session_state.proyecto_activo_nombre = None
+        return
 
+    st.session_state.proyecto_activo = seleccion
+    metadata_path = os.path.join("proyectos", seleccion, "metadata.json")
+    try:
+        with open(metadata_path, 'r', encoding='utf-8') as f:
+            metadata = json.load(f)
+        st.session_state.proyecto_activo_nombre = metadata.get("display_name", seleccion)
+    except (FileNotFoundError, json.JSONDecodeError):
+        st.session_state.proyecto_activo_nombre = seleccion
+
+# --- BARRA LATERAL ---
+with st.sidebar:
+    st.title("Acciones del Proyecto")
+    if st.session_state.proyecto_activo:
+        st.info(f"Activo: **{st.session_state.proyecto_activo_nombre}**")
+        if st.button("Eliminar Proyecto Activo", use_container_width=True, type="secondary"):
+            st.session_state.confirmar_eliminacion = st.session_state.proyecto_activo
+            st.rerun()
+
+# --- LAYOUT SUPERIOR: TÍTULO Y BOTÓN DE TEMA ---
+col_titulo, col_boton_tema = st.columns([3, 1])
+with col_titulo:
+    st.title("🏠 Portal de Proyectos")
+with col_boton_tema:
+    def cambiar_tema():
+        st.session_state.theme_toggle = not st.session_state.theme_toggle
+
+    texto_boton = "Modo Claro ⚪" if st.session_state.theme_toggle else "Modo Oscuro ⚫"
+    st.button(texto_boton, on_click=cambiar_tema, use_container_width=True)
+
+# --- CONTENIDO PRINCIPAL ---
+st.markdown("### Bienvenido al Dashboard de Análisis de Datos")
 st.markdown("---")
-st.header("📚 Biblioteca de Proyectos")
-proyectos = cargar_proyectos()
 
-if not proyectos:
-    st.info("Tu biblioteca está vacía. ¡Crea tu primer proyecto para empezar!")
-else:
-    # El listado de proyectos no cambia
-    for proyecto in proyectos:
-        with st.container(border=True):
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.subheader(f"📂 {proyecto['display_name']}")
-                st.caption(proyecto['description'])
-            with col2:
-                btn_cols = st.columns(2)
-                with btn_cols[0]:
-                    if st.button("Cargar", key=f"load_{proyecto['id']}", use_container_width=True, type="primary"):
-                        st.session_state.proyecto_activo = proyecto
-                        st.session_state.confirmar_eliminacion = None
-                        st.switch_page("pages/1_Configuracion.py")
-                with btn_cols[1]:
-                    if st.button("🗑️", key=f"delete_{proyecto['id']}", use_container_width=True):
-                        st.session_state.confirmar_eliminacion = proyecto
+with st.container(border=True):
+    proyectos = project_manager.cargar_proyectos()
+
+    col_header1, col_header2 = st.columns([2, 1])
+    with col_header1:
+        st.header("Gestión de Proyectos")
+    with col_header2:
+        st.markdown(f"<p style='text-align: right;'><b>{len(proyectos)}</b> Proyectos Existentes</p>", unsafe_allow_html=True)
+
+    opcion_nuevo = "--- Crear Nuevo Proyecto ---"
+    opciones_display = [opcion_nuevo] + list(proyectos.keys())
+
+    if st.session_state.proyecto_activo:
+        try:
+            index_activo = opciones_display.index(st.session_state.proyecto_activo)
+        except ValueError:
+            index_activo = 0
+    else:
+        index_activo = 0
+
+    st.selectbox(
+        "Selecciona un Proyecto o Crea uno Nuevo",
+        options=opciones_display,
+        index=index_activo,
+        key='selector_proyecto',
+        on_change=actualizar_proyecto_activo,
+    )
+
+    if st.session_state.get('selector_proyecto') == opcion_nuevo:
+        with st.form("nuevo_proyecto_form", clear_on_submit=True):
+            nuevo_nombre_proyecto = st.text_input("Nombre del Nuevo Proyecto")
+            if st.form_submit_button("Crear Proyecto ✨", type="primary", use_container_width=True):
+                if nuevo_nombre_proyecto:
+                    if nuevo_nombre_proyecto not in proyectos:
+                        project_manager.inicializar_proyecto(nuevo_nombre_proyecto)
+                        st.session_state.proyecto_activo = nuevo_nombre_proyecto 
+                        st.success(f"Proyecto '{nuevo_nombre_proyecto}' creado y seleccionado.")
                         st.rerun()
+                    else:
+                        st.error("Ya existe un proyecto con ese nombre.")
 
-        if st.session_state.confirmar_eliminacion and st.session_state.confirmar_eliminacion['id'] == proyecto['id']:
-            st.error(f"**ADVERTENCIA:** ¿Estás seguro de que quieres eliminar el proyecto '{proyecto['display_name']}'?")
-            confirm_cols = st.columns(6)
-            with confirm_cols[0]:
-                if st.button("✅ Sí, eliminar", key=f"confirm_del_{proyecto['id']}", use_container_width=True):
-                    shutil.rmtree(os.path.join(PROYECTOS_DIR, proyecto['id']))
-                    if st.session_state.proyecto_activo and st.session_state.proyecto_activo['id'] == proyecto['id']:
-                        st.session_state.proyecto_activo = None
-                    st.session_state.confirmar_eliminacion = None
-                    st.success(f"Proyecto eliminado.")
-                    st.rerun()
-            with confirm_cols[1]:
-                if st.button("❌ Cancelar", key=f"cancel_del_{proyecto['id']}", use_container_width=True):
-                    st.session_state.confirmar_eliminacion = None
-                    st.rerun()
+# --- SECCIÓN DE SIGUIENTES PASOS ---
+if st.session_state.proyecto_activo:
+    nombre_display = st.session_state.proyecto_activo_nombre or st.session_state.proyecto_activo
+    st.success(f"Proyecto activo: **{nombre_display}**")
+
+    with st.container(border=True):
+        st.markdown("#### Siguientes Pasos")
+
+        path_datos_procesados = os.path.join("proyectos", st.session_state.proyecto_activo, "datos_procesados.parquet")
+        existen_datos = os.path.exists(path_datos_procesados)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Cargar / Configurar Datos ⚙️", use_container_width=True):
+                st.switch_page("pages/1_Configuracion.py")
+        with col2:
+            if st.button("Ver Reportes 📊", use_container_width=True, disabled=not existen_datos):
+                st.switch_page("pages/2_Reportes.py")
+
+        if not existen_datos:
+            st.info("El siguiente paso es cargar y configurar los datos de tu proyecto.")
+
+# --- LÓGICA DE CONFIRMACIÓN DE ELIMINACIÓN ---
+if st.session_state.confirmar_eliminacion:
+    proyecto_para_borrar = st.session_state.confirmar_eliminacion
+    nombre_display_borrar = ""
+
+    proyectos_cargados = project_manager.cargar_proyectos()
+    ruta_proyecto = proyectos_cargados.get(proyecto_para_borrar)
+    if ruta_proyecto:
+        metadata_path = os.path.join(ruta_proyecto, "metadata.json")
+        try:
+            with open(metadata_path, 'r', encoding='utf-8') as f:
+                metadata = json.load(f)
+            nombre_display_borrar = metadata.get("display_name", proyecto_para_borrar)
+        except:
+            nombre_display_borrar = proyecto_para_borrar
+    else:
+        nombre_display_borrar = proyecto_para_borrar
+
+    st.error(f"¿Estás seguro de que quieres eliminar el proyecto **'{nombre_display_borrar}'**? Esta acción no se puede deshacer.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Sí, eliminar para siempre", type="primary", use_container_width=True):
+            if proyecto_para_borrar in project_manager.cargar_proyectos():
+                project_manager.eliminar_proyecto(proyecto_para_borrar)
+                st.success(f"Proyecto '{nombre_display_borrar}' eliminado.")
+
+                st.session_state.confirmar_eliminacion = None
+                st.session_state.proyecto_activo = None
+                st.session_state.proyecto_activo_nombre = None
+                time.sleep(1)
+                st.rerun()
+    with col2:
+        if st.button("Cancelar", use_container_width=True):
+            st.session_state.confirmar_eliminacion = None
+            st.rerun()
