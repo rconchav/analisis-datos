@@ -1,11 +1,13 @@
 # src/utils/visualization_base.py
 
 import altair as alt
-import pandas as pd # Necesario para _format_large_number
-import numpy as np # Necesario para _format_large_number
+import pandas as pd
+import numpy as np
 
 def _configurar_grafico_altair(chart, titulo: str, paleta_colores: list):
-    # Lógica original de graficos.py
+    """
+    Aplica configuraciones comunes a los gráficos de Altair.
+    """
     return chart.properties(
         title=alt.Title(
             text=titulo,
@@ -29,7 +31,9 @@ def _configurar_grafico_altair(chart, titulo: str, paleta_colores: list):
     )
 
 def _format_large_number(num, is_currency=False):
-    # Lógica original de graficos.py
+    """
+    Formatea un número grande a un formato legible (K, M, B) y opcionalmente como moneda.
+    """
     if pd.isna(num):
         return "$ 0" if is_currency else "0"
 

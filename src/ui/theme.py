@@ -11,7 +11,7 @@ def configurar_tema(tema_actual: str):
     Aplica el tema cambiando el atributo 'data-theme' en el body principal.
     """
     tema_js = "dark" if tema_actual == "Oscuro" else "light"
-    
+
     # Este script busca el <body> principal y le asigna el tema.
     js_script = f"""
     <script>

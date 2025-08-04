@@ -1,4 +1,38 @@
+# requirements.txt - Fase G2: Cimientos en la Nube (Principal del Proyecto)
+
+# Core de la aplicación y UI (Streamlit, etc. - se mantienen para futuras herramientas internas)
 streamlit
+streamlit-aggrid
+streamlit-js-eval
+
+# Backend API
+fastapi
+uvicorn[standard]
+
+# Google Cloud SDKs
+google-cloud-pubsub
+google-cloud-storage
+google-cloud-logging
+
+# Manipulación y análisis de datos (se mantienen para uso en microservicios backend)
 pandas
-pyarrow # Muy recomendado para Pandas con archivos Parquet
-openpyxl # Para leer archivos Excel
+pyarrow
+openpyxl
+numpy
+scikit-learn
+
+# Visualización
+altair
+plotly
+
+# Limpieza de texto (para el microservicio de limpieza)
+fuzzywuzzy
+python-Levenshtein
+
+# Extracción de tablas desde PDFs (para el microservicio extractor)
+camelot-py[cv]==1.0.0
+pypdf<4.0
+cryptography<48.0.0
+
+# Escritura de archivos Excel
+xlsxwriter

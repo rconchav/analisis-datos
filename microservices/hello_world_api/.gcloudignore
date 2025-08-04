@@ -1,0 +1,16 @@
+# .gcloudignore
+
+# Directorios de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Archivos de depuración y logs
+*.log
+*.out

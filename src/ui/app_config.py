@@ -2,7 +2,7 @@
 
 import streamlit as st
 import os
-from src.ui.theme import configurar_tema # Importa la nueva ubicación
+from src.ui.theme import configurar_tema
 
 def configurar_pagina(titulo_pagina: str, layout: str = "wide"):
     st.set_page_config(layout=layout, page_title=titulo_pagina)
@@ -19,7 +19,7 @@ def configurar_pagina(titulo_pagina: str, layout: str = "wide"):
     st.markdown(estilos_fuentes, unsafe_allow_html=True)
 
     # Carga de style.css
-    path_css = os.path.join(".streamlit", "assets", "style.css")
+    path_css = os.path.join(".streamlit", "assets", "style.css") # Esto asumirá .streamlit está en la raíz
     if os.path.exists(path_css):
         with open(path_css) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
